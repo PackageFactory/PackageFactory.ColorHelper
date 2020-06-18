@@ -1,0 +1,4 @@
+Neos:
+  Fusion:
+    defaultContext:
+      Color: 'PackageFactory\ColorHelper\Eel\ColorHelper'

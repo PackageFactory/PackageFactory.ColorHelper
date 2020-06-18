@@ -1,0 +1,19 @@
+{
+    "description": "EEL Color helper to transform hex colors",
+    "type": "neos-package",
+    "name": "packagefactory/colorhelper",
+    "require": {
+        "neos/eel": "^5.3 || ^6.0 || dev-master",
+        "neos/fusion": "^4.3 || ^5.0 || dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "PackageFactory\\ColorHelper\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "PackageFactory.ColorHelper"
+        }
+    }
+}
