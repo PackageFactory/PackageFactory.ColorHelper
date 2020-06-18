@@ -8,12 +8,20 @@ between hex, rgb and hsl color representations.
 
 The package provides the `Color` helper that exposes the following methods to Fusion.
 
+### Creating
+
 Colors can be created from hex, rgb and hsl values
 - `color = ${ Color.hex('#80e619') }`  expects a hex string of 3 or 6 chars
 - `color = ${ Color.rgb(100, 0, 256) }` expects three integers each between 0 and 255
 - `color = ${ Color.hsl(156, 25, 75) }` expects three integers a degree 0-355 and two percent values 0-100 
 
-Once created those colors can then be manipulated via fluent interface 
+The methods rgb and hsl allow to specify the alpga as fourth argument 
+expecting a dfloat between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) ` 
+
+### Manipulating 
+
+Once created those colors can then be manipulated via fluent interface
+like a flow query for colors. 
 
 Adjust saturation
 - `color = ${ Color.hex('#80e619').saturate(20) }` >> #80ff00
@@ -30,10 +38,27 @@ Modify the color value by rotating in the hue axis
 Invert color
 - `color = ${ Color.hex('#f2330d').spin(180) }` >> #0dd0f2
 
+Fade colors
+- `color = ${ Color.hex('#f2330d').fadeout(10) }` >> #0dd0f2
+- `color = ${ Color.rgb(255,0,0,0).fadein(20) }` >> #0dd0f2
+
 Mix colors
 - `color = ${ Color.hex('#ff0000').mix(Color.hex('#0000ff'), 50) }` >> #800080
 
-Offcourse this can be usd in afx attributes as any other eel expression.
+Offcourse this can be used in afx attributes as any other eel expression.
+
+### Value rendering
+
+When casted to string the color objects will render as hex or rgba() depending
+on wether an alpha value is present or not. 
+
+For special requirements the format can be specified. Be aware that if
+you use the hex format alpha is ignored. The rgb and hsl formats will
+output the alpha if the alpha value is different from 1.
+
+- `hex = ${ Color.rgba(255,0,0,0).fadein(20).hex() }` >> #ff0000
+- `rgb = ${ Color.rgba(255,0,0,0).fadein(20).rgb() }` >> rgba( 255, 0, 0, 0.8)
+- `hsl = ${ Color.rgba(255,0,0,0).fadein(20).hsl() }` >> hsla( 0, 100%, 50%, 0.8)
 
 ## Installation
 

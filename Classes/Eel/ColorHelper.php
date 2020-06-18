@@ -10,22 +10,24 @@ class ColorHelper implements ProtectedContextAwareInterface
      * @param $red
      * @param $green
      * @param $blue
+     * @param $alpha
      * @return Color
      */
-    public function rgb($red, $green, $blue): Color
+    public function rgb($red, $green, $blue, $alpha = 1): Color
     {
-        return Color::createFromRgb($red, $green, $blue);
+        return Color::createFromRgb($red, $green, $blue, $alpha);
     }
 
     /**
      * @param $hue
      * @param $saturatiom
      * @param $lightness
+     * @param $alpha
      * @return Color
      */
-    public function hsl($hue, $saturatiom, $lightness): Color
+    public function hsl($hue, $saturatiom, $lightness, $alpha = 1): Color
     {
-        return Color::createFromHSL($hue, $saturatiom, $lightness);
+        return Color::createFromHSL($hue, $saturatiom, $lightness, $alpha);
     }
 
     /**
