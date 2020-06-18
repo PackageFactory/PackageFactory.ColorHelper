@@ -15,8 +15,8 @@ Colors can be created from hex, rgb and hsl values
 - `color = ${ Color.rgb(100, 0, 256) }` expects three integers each between 0 and 255
 - `color = ${ Color.hsl(156, 25, 75) }` expects three integers a degree 0-355 and two percent values 0-100 
 
-The methods rgb and hsl allow to specify the alpga as fourth argument 
-expecting a dfloat between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) ` 
+The methods rgb and hsl allow to specify the alpha as fourth argument 
+expecting a float between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) }` 
 
 ### Manipulating 
 
