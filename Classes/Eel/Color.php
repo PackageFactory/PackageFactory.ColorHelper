@@ -23,10 +23,10 @@ class Color implements ProtectedContextAwareInterface
     private $alpha = 1;
 
     /**
-     * @param int $hue
-     * @param int $saturation
-     * @param int $lightness
-     * @param float $alpha
+     * @param int $hue 0-356
+     * @param int $saturation 0-100
+     * @param int $lightness 0-100
+     * @param float $alpha 0-1
      * @return Color
      * @throws \Exception
      */
@@ -57,14 +57,15 @@ class Color implements ProtectedContextAwareInterface
         $color->saturation = $saturation;
         $color->lightness = $lightness;
         $color->alpha = $alpha;
+
         return $color;
     }
 
     /**
-     * @param int $red
-     * @param int $green
-     * @param int $blue
-     * @param float $alpha
+     * @param int $red number 0-255
+     * @param int $green 0-255
+     * @param int $blue 0-255
+     * @param float $alpha 0-1
      * @return Color
      * @throws \Exception
      */
@@ -173,38 +174,41 @@ class Color implements ProtectedContextAwareInterface
 
     public function __toString(): string
     {
-        if ($this->alpha == 1) {
-            return $this->hex();
-        } else {
-            return $this->rgb();
-        }
+        return $this->hex();
     }
 
     public function rgb(): string
     {
         if ($this->alpha == 1) {
-            return sprintf('rgb( %s, %s, %s)', $this->red, $this->green, $this->blue);
+            return sprintf('rgb(%s, %s, %s)', $this->red, $this->green, $this->blue);
         } else {
-            return sprintf('rgba( %s, %s, %s, %s)', $this->red, $this->green, $this->blue, $this->alpha);
+            return sprintf('rgba(%s, %s, %s, %s)', $this->red, $this->green, $this->blue, $this->alpha);
         }
     }
 
     public function hsl(): string
     {
         if ($this->alpha == 1) {
-            return sprintf('hsl( %s, %s%%, %s%%)', $this->hue, $this->saturation, $this->lightness);
+            return sprintf('hsl(%s, %s%%, %s%%)', $this->hue, $this->saturation, $this->lightness);
         } else {
-            return sprintf('hsla( %s, %s%%, %s%%, %s)', $this->hue, $this->saturation, $this->lightness, $this->alpha);
+            return sprintf('hsla(%s, %s%%, %s%%, %s)', $this->hue, $this->saturation, $this->lightness, $this->alpha);
         }
     }
 
     public function hex(): string
     {
-        return '#' . ColorLibrary::rgbToHex([
-                'R' => $this->red,
-                'G' => $this->green,
-                'B' => $this->blue
-        ]);
+        if ($this->alpha == 1) {
+            return '#'
+                . str_pad(dechex($this->red), 2, '0')
+                . str_pad(dechex($this->green), 2, '0')
+                . str_pad(dechex($this->blue), 2, '0');
+        } else {
+            return '#'
+                . str_pad(dechex($this->red), 2, '0')
+                . str_pad(dechex($this->green), 2, '0')
+                . str_pad(dechex($this->blue), 2, '0')
+                . str_pad(dechex(round($this->alpha * 255)), 2, '0');
+        }
     }
 
     /**
@@ -312,7 +316,6 @@ class Color implements ProtectedContextAwareInterface
             $this->alpha + ($amount / 100)
         );
     }
-
 
     /**
      * @param int $amount to desaturate the color

@@ -4,6 +4,11 @@
 This internally uses a copy of mexitek/phpcolors to do the conversions
 between hex, rgb and hsl color representations.
 
+**Attention: This package is a first kind of naive prototype to implement
+color transformations for Fusion. If this turns out to be valuable it should
+be impoved with netter color math and pronbly a fully fledged css color 
+parser.**
+
 ## Usage
 
 The package provides the `Color` helper that exposes the following methods to Fusion.
@@ -16,7 +21,14 @@ Colors can be created from hex, rgb and hsl values
 - `color = ${ Color.hsl(156, 25, 75) }` expects three integers a degree 0-355 and two percent values 0-100 
 
 The methods rgb and hsl allow to specify the alpha as fourth argument 
-expecting a float between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) }` 
+expecting a float between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) }`
+
+If you have a color value specified as css color string you can use the
+`Color.css` method to instantiate the color.  
+
+- `color = ${ Color.css('#80e619') }`
+- `color = ${ Color.css('rbg( 10%, 50%, 0%, 50%)') }` 
+- `color = ${ Color.css('hsl( 270, 10%, 50%, 0.5)') }` 
 
 ### Manipulating 
 
