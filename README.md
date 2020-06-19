@@ -24,11 +24,13 @@ The methods rgb and hsl allow to specify the alpha as fourth argument
 expecting a float between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) }`
 
 If you have a color value specified as css color string you can use the
-`Color.css` method to instantiate the color.  
+`Color.css` method to instantiate the color. Plaese be aware that this
+uses a very simple regex based parser for the css colors and for now only 
+suppprts hex,rgb and hsla colors.   
 
 - `color = ${ Color.css('#80e619') }`
-- `color = ${ Color.css('rbg( 10%, 50%, 0%, 50%)') }` 
-- `color = ${ Color.css('hsl( 270, 10%, 50%, 0.5)') }` 
+- `color = ${ Color.css('rbg( 10%, 50%, 0%, 50%)') }`
+- `color = ${ Color.css('hsl( 270, 10%, 50%, 0.5)') }`
 
 ### Manipulating 
 
@@ -61,16 +63,13 @@ Offcourse this can be used in afx attributes as any other eel expression.
 
 ### Value rendering
 
-When casted to string the color objects will render as hex or rgba() depending
-on wether an alpha value is present or not. 
+When casted to string the color objects will render as hex value. 
+For special requirements the format can be specified. All formats will 
+only render an alpha value if the color is transparent. 
 
-For special requirements the format can be specified. Be aware that if
-you use the hex format alpha is ignored. The rgb and hsl formats will
-output the alpha if the alpha value is different from 1.
-
-- `hex = ${ Color.rgba(255,0,0,0).fadein(20).hex() }` >> #ff0000
-- `rgb = ${ Color.rgba(255,0,0,0).fadein(20).rgb() }` >> rgba( 255, 0, 0, 0.8)
-- `hsl = ${ Color.rgba(255,0,0,0).fadein(20).hsl() }` >> hsla( 0, 100%, 50%, 0.8)
+- `hex = ${ Color.rgb(255,0,0).hex() }` >> #ff0000
+- `rgb = ${ Color.rgba(255,0,0).fadeout(50).rgb() }` >> rgba( 255, 0, 0, 0.5)
+- `hsl = ${ Color.rgba(255,0,0).hsl() }` >> hsla( 0, 100%, 50%)
 
 ## Installation
 
