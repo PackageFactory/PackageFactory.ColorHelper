@@ -3,7 +3,7 @@ namespace PackageFactory\ColorHelper\Eel;
 
 use Neos\Eel\ProtectedContextAwareInterface;
 
-class ColorHelper implements ProtectedContextAwareInterface
+class ColorBuilder implements ProtectedContextAwareInterface
 {
 
     const PATTERN_HEX_LONG = '/^#?(?<red>[0-9abcdefABCDEF]{2})(?<green>[0-9abcdefABCDEF]{2})(?<blue>[0-9abcdefABCDEF]{2})(?:(?<alpha>[0-9abcdefABCDEF]{2}))?^$/u';
