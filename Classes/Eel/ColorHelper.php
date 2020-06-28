@@ -22,26 +22,41 @@ class ColorHelper implements ProtectedContextAwareInterface
         $this->color = $color;
     }
 
+    /**
+     * @return ColorInterface
+     */
     public function getColor(): ColorInterface
     {
         return $this->color;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->color->getHexString();
     }
 
+    /**
+     * @return string
+     */
     public function rgb(): string
     {
         return $this->color->getRgbaString();
     }
 
+    /**
+     * @return string
+     */
     public function hsl(): string
     {
         return $this->color->getHslaString();
     }
 
+    /**
+     * @return string
+     */
     public function hex(): string
     {
         return $this->color->getHexString();
@@ -49,9 +64,8 @@ class ColorHelper implements ProtectedContextAwareInterface
 
     /**
      * @param ColorHelper $color
-     * @param int         $weight between 0 and 100
-     *
-     * @return string
+     * @param int $weight
+     * @return ColorHelper
      */
     public function mix(self $color, int $weight = 50): self
     {
@@ -61,7 +75,7 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @param int $amount between 0 and 100
      *
-     * @return string
+     * @return ColorHelper
      */
     public function lighten(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
@@ -71,7 +85,7 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @param int $amount between 0 and 100
      *
-     * @return string
+     * @return ColorHelper
      */
     public function darken(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
@@ -83,7 +97,7 @@ class ColorHelper implements ProtectedContextAwareInterface
      *
      * @param int $amount degrees to rotate the color
      *
-     * @return string
+     * @return ColorHelper
      */
     public function spin(int $amount): self
     {
@@ -93,7 +107,7 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @param int $amount to saturate the color
      *
-     * @return string
+     * @return ColorHelper
      */
     public function saturate(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
@@ -103,7 +117,7 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @param int $amount to desaturate the color
      *
-     * @return string
+     * @return ColorHelper
      */
     public function desaturate(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
@@ -113,7 +127,7 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @param int $amount to desaturate the color
      *
-     * @return string
+     * @return ColorHelper
      */
     public function fadein(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
@@ -123,7 +137,7 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @param int $amount to desaturate the color
      *
-     * @return string
+     * @return ColorHelper
      */
     public function fadeout(int $amount = self::DEFAULT_ADJUSTMENT): self
     {

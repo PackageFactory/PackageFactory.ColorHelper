@@ -30,7 +30,7 @@
         ],
         "test:phpstan": [
             "composer test:prepare",
-            "Build/Travis/bin/phpstan analyse Build/Travis/Packages/Application/PackageFactory.ColorHelper/Classes"
+            "Build/Travis/bin/phpstan analyse --level 8 Build/Travis/Packages/Application/PackageFactory.ColorHelper/Classes"
         ],
         "test:unit": [
             "composer test:prepare",

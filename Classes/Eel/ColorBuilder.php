@@ -56,19 +56,19 @@ class ColorBuilder implements ProtectedContextAwareInterface
     public function hex(string $hex): ?ColorHelper
     {
         if (preg_match(self::PATTERN_HEX_SHORT, $hex, $matches)) {
-            $red = hexdec($matches['red'].$matches['red']);
-            $green = hexdec($matches['green'].$matches['green']);
-            $blue = hexdec($matches['blue'].$matches['blue']);
-            $alpha = hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : 1.0);
+            $red = (int)hexdec($matches['red'].$matches['red']);
+            $green = (int)hexdec($matches['green'].$matches['green']);
+            $blue = (int)hexdec($matches['blue'].$matches['blue']);
+            $alpha = (int)hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : "ff");
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
             );
         } elseif (preg_match(self::PATTERN_HEX_LONG, $hex, $matches)) {
-            $red = hexdec($matches['red']);
-            $green = hexdec($matches['green']);
-            $blue = hexdec($matches['blue']);
-            $alpha = hexdec($matches['alpha'] ?? 1);
+            $red = (int)hexdec($matches['red']);
+            $green = (int)hexdec($matches['green']);
+            $blue = (int)hexdec($matches['blue']);
+            $alpha = (int)hexdec($matches['alpha'] ?? "ff");
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -88,19 +88,19 @@ class ColorBuilder implements ProtectedContextAwareInterface
     public function css(string $colorString): ?ColorHelper
     {
         if (preg_match(self::PATTERN_HEX_SHORT, $colorString, $matches)) {
-            $red = hexdec($matches['red'].$matches['red']);
-            $green = hexdec($matches['green'].$matches['green']);
-            $blue = hexdec($matches['blue'].$matches['blue']);
-            $alpha = hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : 1.0);
+            $red = (int)hexdec($matches['red'].$matches['red']);
+            $green = (int)hexdec($matches['green'].$matches['green']);
+            $blue = (int)hexdec($matches['blue'].$matches['blue']);
+            $alpha = (int)hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : "ff");
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
             );
         } elseif (preg_match(self::PATTERN_HEX_LONG, $colorString, $matches)) {
-            $red = hexdec($matches['red']);
-            $green = hexdec($matches['green']);
-            $blue = hexdec($matches['blue']);
-            $alpha = hexdec($matches['alpha'] ?? 1);
+            $red = (int)hexdec($matches['red']);
+            $green = (int)hexdec($matches['green']);
+            $blue = (int)hexdec($matches['blue']);
+            $alpha = (int)hexdec($matches['alpha'] ? $matches['alpha'] : "ff");
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
