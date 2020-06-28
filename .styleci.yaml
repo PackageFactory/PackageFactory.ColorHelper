@@ -1,0 +1,10 @@
+preset: psr2
+
+finder:
+  path:
+    - "Classes"
+    - "Tests"
+
+enabled:
+  - short_array_syntax
+  - no_unused_imports

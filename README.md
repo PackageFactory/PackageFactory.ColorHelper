@@ -1,16 +1,6 @@
 # PackageFactory.ColorHelper
 ## EEL Color Helper, implementing some of the less color tranformations
 
-This internally uses a copy of mexitek/phpcolors to do the conversions
-between hex, rgb and hsl color representations.
-
-**Attention: This package is a first kind of naive prototype to implement
-color transformations for Fusion. If this turns out to be valuable it should
-be impoved with netter color math and pronbly a fully fledged css color 
-parser.**
-
-## Usage
-
 The package provides the `Color` helper that exposes the following methods to Fusion.
 
 ### Creating
