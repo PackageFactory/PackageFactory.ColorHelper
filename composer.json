@@ -7,6 +7,9 @@
         "neos/eel": "^5.3 || ^6.0 || dev-master",
         "neos/fusion": "^4.3 || ^5.0 || dev-master"
     },
+    "require-dev": {
+        "phpstan/phpstan": "*"
+    },
     "autoload": {
         "psr-4": {
             "PackageFactory\\ColorHelper\\": "Classes/"
@@ -25,11 +28,16 @@
             "rm -f Build/Travis/Configuration/Routes.yaml",
             "cp Build/Travis/Routes.yaml Build/Travis/Configuration/"
         ],
+        "test:phpstan": [
+            "composer test:prepare",
+            "Build/Travis/bin/phpstan analyse Build/Travis/Packages/Application/PackageFactory.ColorHelper/Classes"
+        ],
         "test:unit": [
             "composer test:prepare",
             "Build/Travis/bin/phpunit --verbose -c Build/Travis/unit-tests.xml"
         ],
         "test": [
+            "composer test:phpstan",
             "composer test:unit"
         ]
     }
