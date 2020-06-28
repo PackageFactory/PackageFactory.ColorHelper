@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
-interface ColorInterface {
-
+interface ColorInterface
+{
     /**
      * @return RgbaColor
      */
@@ -17,9 +18,10 @@ interface ColorInterface {
 
     /**
      * @param ColorInterface $color
+     *
      * @return bool
      */
-    public function equals(ColorInterface $color): bool;
+    public function equals(self $color): bool;
 
     /**
      * @return string
@@ -43,32 +45,37 @@ interface ColorInterface {
 
     /**
      * @param ColorInterface $color
-     * @param int $weight 0 ... 100
+     * @param int            $weight 0 ... 100
+     *
      * @return ColorInterface
      */
-    public function withMixedColor(ColorInterface $color, int $weight): ColorInterface;
+    public function withMixedColor(self $color, int $weight): self;
 
     /**
      * @param int $delta
+     *
      * @return ColorInterface
      */
-    public function withAdjustedLightness(int $delta): ColorInterface;
+    public function withAdjustedLightness(int $delta): self;
 
     /**
      * @param int $delta
+     *
      * @return ColorInterface
      */
-    public function withAdjustedSaturation(int $delta): ColorInterface;
+    public function withAdjustedSaturation(int $delta): self;
 
     /**
      * @param int $delta
+     *
      * @return ColorInterface
      */
-    public function withAdjustedHue(int $delta): ColorInterface;
+    public function withAdjustedHue(int $delta): self;
 
     /**
      * @param int $delta
+     *
      * @return ColorInterface
      */
-    public function withAdjustedAlpha(int $delta): ColorInterface;
+    public function withAdjustedAlpha(int $delta): self;
 }

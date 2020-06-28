@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
 class HslaColor extends AbstractColor implements ColorInterface
 {
-
     /**
      * @var int
      */
@@ -27,6 +27,7 @@ class HslaColor extends AbstractColor implements ColorInterface
 
     /**
      * HslaColor constructor.
+     *
      * @param int $hue
      * @param int $saturation
      * @param int $lightness
@@ -34,17 +35,17 @@ class HslaColor extends AbstractColor implements ColorInterface
      */
     public function __construct(int $hue, int $saturation, int $lightness, int $alpha = 255)
     {
-        if ($hue < 0 || $hue > 359 ) {
-            throw new \InvalidArgumentException('argument hue has to be an integer between 0 and 359, ' . $hue . ' was given.' );
+        if ($hue < 0 || $hue > 359) {
+            throw new \InvalidArgumentException('argument hue has to be an integer between 0 and 359, '.$hue.' was given.');
         }
-        if ($saturation < 0 || $saturation > 100 ) {
-            throw new \InvalidArgumentException('argument saturation has to be an integer between 0 and 100, ' . $saturation . ' was given.');
+        if ($saturation < 0 || $saturation > 100) {
+            throw new \InvalidArgumentException('argument saturation has to be an integer between 0 and 100, '.$saturation.' was given.');
         }
-        if ($lightness < 0 || $lightness > 100 ) {
-            throw new \InvalidArgumentException('argument luminosity has to be an integer between 0 and 100, ' . $lightness . ' was given.');
+        if ($lightness < 0 || $lightness > 100) {
+            throw new \InvalidArgumentException('argument luminosity has to be an integer between 0 and 100, '.$lightness.' was given.');
         }
-        if ($alpha < 0 || $alpha > 255 ) {
-            throw new \InvalidArgumentException('argument alpha has to be an integer between 0 and 255, ' . $alpha . ' was given');
+        if ($alpha < 0 || $alpha > 255) {
+            throw new \InvalidArgumentException('argument alpha has to be an integer between 0 and 255, '.$alpha.' was given');
         }
 
         $this->hue = $hue;
@@ -93,7 +94,7 @@ class HslaColor extends AbstractColor implements ColorInterface
         $S = $this->saturation / 100;
         $L = $this->lightness / 100;
         $C = (1 - abs((2 * $L) - 1)) * $S;
-        $X = $C * ( 1 - abs( (($this->hue / 60) % 2) - 1));
+        $X = $C * (1 - abs((($this->hue / 60) % 2) - 1));
         $m = $L - ($C / 2);
 
         if ($this->hue < 0) {
@@ -131,9 +132,9 @@ class HslaColor extends AbstractColor implements ColorInterface
         $B = ($b + $m) * 255;
 
         return new RgbaColor(
-            (int)round($R),
-            (int)round($G),
-            (int)round($B),
+            (int) round($R),
+            (int) round($G),
+            (int) round($B),
             $this->alpha
         );
     }
@@ -141,22 +142,27 @@ class HslaColor extends AbstractColor implements ColorInterface
     /**
      * @return HslaColor
      */
-    public function asHsla(): HslaColor
+    public function asHsla(): self
     {
         return $this;
     }
 
     /**
      * @param int $delta
+     *
      * @return ColorInterface
      */
     public function withAdjustedAlpha(int $delta): ColorInterface
     {
         $alpha = $this->getAlpha() + $delta;
-        if ($alpha < 0) $alpha = 0;
-        if ($alpha > 255) $alpha = 255;
+        if ($alpha < 0) {
+            $alpha = 0;
+        }
+        if ($alpha > 255) {
+            $alpha = 255;
+        }
 
-        return new HslaColor(
+        return new self(
             $this->hue,
             $this->saturation,
             $this->lightness,

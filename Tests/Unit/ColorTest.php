@@ -5,7 +5,6 @@ namespace PackageFactory\ColorHelper\Tests\Unit;
 use PackageFactory\ColorHelper\Domain\ValueObject\ColorInterface;
 use PackageFactory\ColorHelper\Domain\ValueObject\HslaColor;
 use PackageFactory\ColorHelper\Domain\ValueObject\RgbaColor;
-use PackageFactory\ColorHelper\Eel\ColorHelper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
@@ -14,23 +13,23 @@ class ColorTest extends TestCase
     /**
      * @return array
      */
-    public function getColorFixtures ():array
+    public function getColorFixtures(): array
     {
-        $yaml = Yaml::parseFile(__DIR__ . '/Colors.yaml');
+        $yaml = Yaml::parseFile(__DIR__.'/Colors.yaml');
         array_walk(
             $yaml,
-            function($item, $name)
-            {
+            function ($item, $name) {
                 $item['name'] = $name;
             }
         );
         $yaml = array_values($yaml);
         $yaml = array_map(
-            function($item) {
+            function ($item) {
                 return [$item];
             },
             $yaml
         );
+
         return $yaml;
     }
 
@@ -76,17 +75,15 @@ class ColorTest extends TestCase
         self::assertEquals($hex, strtoupper($rgbColor->getHexString()));
     }
 
-
-
-    public function conversionToHexStringWorksDataProvider():array
+    public function conversionToHexStringWorksDataProvider(): array
     {
         return [
-            [new RgbaColor(255,0,0), '#ff0000'],
-            [new RgbaColor(0,255,0), '#00ff00'],
-            [new RgbaColor(0,0,255), '#0000ff'],
-            [new RgbaColor(255,255,255,0), '#ffffff00'],
-            [new RgbaColor(255,255,255,128), '#ffffff80'],
-            [new RgbaColor(255,255,255,255), '#ffffff']
+            [new RgbaColor(255, 0, 0), '#ff0000'],
+            [new RgbaColor(0, 255, 0), '#00ff00'],
+            [new RgbaColor(0, 0, 255), '#0000ff'],
+            [new RgbaColor(255, 255, 255, 0), '#ffffff00'],
+            [new RgbaColor(255, 255, 255, 128), '#ffffff80'],
+            [new RgbaColor(255, 255, 255, 255), '#ffffff'],
         ];
     }
 
@@ -99,15 +96,15 @@ class ColorTest extends TestCase
         self::assertEquals($color->getHexString(), $expectation);
     }
 
-    public function conversionToRgbStringWorksDataProvider():array
+    public function conversionToRgbStringWorksDataProvider(): array
     {
         return [
-            [new RgbaColor(255,0,0), 'rgb(255, 0, 0)'],
-            [new RgbaColor(0,255,0), 'rgb(0, 255, 0)'],
-            [new RgbaColor(0,0,255), 'rgb(0, 0, 255)'],
-            [new RgbaColor(255,255,255,0), 'rgba(255, 255, 255, 0)'],
-            [new RgbaColor(255,255,255,128), 'rgba(255, 255, 255, 128)'],
-            [new RgbaColor(255,255,255,255), 'rgb(255, 255, 255)']
+            [new RgbaColor(255, 0, 0), 'rgb(255, 0, 0)'],
+            [new RgbaColor(0, 255, 0), 'rgb(0, 255, 0)'],
+            [new RgbaColor(0, 0, 255), 'rgb(0, 0, 255)'],
+            [new RgbaColor(255, 255, 255, 0), 'rgba(255, 255, 255, 0)'],
+            [new RgbaColor(255, 255, 255, 128), 'rgba(255, 255, 255, 128)'],
+            [new RgbaColor(255, 255, 255, 255), 'rgb(255, 255, 255)'],
         ];
     }
 
@@ -120,14 +117,14 @@ class ColorTest extends TestCase
         self::assertEquals($color->getRgbaString(), $expectation);
     }
 
-    public function conversionToHslaStringWorksDataProvider():array
+    public function conversionToHslaStringWorksDataProvider(): array
     {
         return [
-            [new HslaColor(320,20,50), 'hsl(320, 20%, 50%)'],
-            [new HslaColor(50,80,80), 'hsl(50, 80%, 80%)'],
-            [new HslaColor(320,20,50,0), 'hsla(320, 20%, 50%, 0)'],
-            [new HslaColor(320,20,50,128), 'hsla(320, 20%, 50%, 0.5)'],
-            [new HslaColor(320,20,50,255), 'hsl(320, 20%, 50%)']
+            [new HslaColor(320, 20, 50), 'hsl(320, 20%, 50%)'],
+            [new HslaColor(50, 80, 80), 'hsl(50, 80%, 80%)'],
+            [new HslaColor(320, 20, 50, 0), 'hsla(320, 20%, 50%, 0)'],
+            [new HslaColor(320, 20, 50, 128), 'hsla(320, 20%, 50%, 0.5)'],
+            [new HslaColor(320, 20, 50, 255), 'hsl(320, 20%, 50%)'],
         ];
     }
 
@@ -140,18 +137,18 @@ class ColorTest extends TestCase
         self::assertEquals($color->getHslaString(), $expectation);
     }
 
-    public function colorMixingWorksDataProvider():array
+    public function colorMixingWorksDataProvider(): array
     {
         return [
-            [new RgbaColor(0,0,0,0), new RgbaColor(255,255,255,255), 100, new RgbaColor(0,0,0,0)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(255,255,255,255), 75, new RgbaColor(64,64,64,64)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(255,255,255,255), 50, new RgbaColor(128,128,128,128)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(255,255,255,255), 25, new RgbaColor(191,191,191,191)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(255,255,255,255), 0, new RgbaColor(255,255,255,255)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(255,0,0,0), 50, new RgbaColor(128,0,0,0)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(0,255,0,0), 50, new RgbaColor(0,128,0,0)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(0,0,255,0), 50, new RgbaColor(0,0,128,0)],
-            [new RgbaColor(0,0,0,0), new RgbaColor(0,0,0,255), 50, new RgbaColor(0,0,0,128)]
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 100, new RgbaColor(0, 0, 0, 0)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 75, new RgbaColor(64, 64, 64, 64)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 50, new RgbaColor(128, 128, 128, 128)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 25, new RgbaColor(191, 191, 191, 191)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 0, new RgbaColor(255, 255, 255, 255)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 0, 0, 0), 50, new RgbaColor(128, 0, 0, 0)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 255, 0, 0), 50, new RgbaColor(0, 128, 0, 0)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 0, 255, 0), 50, new RgbaColor(0, 0, 128, 0)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 0, 0, 255), 50, new RgbaColor(0, 0, 0, 128)],
         ];
     }
 
@@ -165,13 +162,13 @@ class ColorTest extends TestCase
         self::assertTrue($mixed->equals($expectation));
     }
 
-    public function lightnessAdjustmentWorksDataProvider():array
+    public function lightnessAdjustmentWorksDataProvider(): array
     {
         return [
-            [new HslaColor(0,0,50,0),10,new HslaColor(0,0,60,0)],
-            [new HslaColor(0,0,50,0),-10,new HslaColor(0,0,40,0)],
-            [new HslaColor(0,0,50,0),100,new HslaColor(0,0,100,0)],
-            [new HslaColor(0,0,50,0),-100,new HslaColor(0,0,0,0)]
+            [new HslaColor(0, 0, 50, 0), 10, new HslaColor(0, 0, 60, 0)],
+            [new HslaColor(0, 0, 50, 0), -10, new HslaColor(0, 0, 40, 0)],
+            [new HslaColor(0, 0, 50, 0), 100, new HslaColor(0, 0, 100, 0)],
+            [new HslaColor(0, 0, 50, 0), -100, new HslaColor(0, 0, 0, 0)],
         ];
     }
 
@@ -185,13 +182,13 @@ class ColorTest extends TestCase
         self::assertTrue($adjusted->equals($expectation));
     }
 
-    public function saturationAdjustmentWorksDataProvider():array
+    public function saturationAdjustmentWorksDataProvider(): array
     {
         return [
-            [new HslaColor(0,50,0,0),10,new HslaColor(0,60,0,0)],
-            [new HslaColor(0,50,0,0),-10,new HslaColor(0,40,0,0)],
-            [new HslaColor(0,50,0,0),100,new HslaColor(0,100,0,0)],
-            [new HslaColor(0,50,0,0),-100,new HslaColor(0,0,0,0)]
+            [new HslaColor(0, 50, 0, 0), 10, new HslaColor(0, 60, 0, 0)],
+            [new HslaColor(0, 50, 0, 0), -10, new HslaColor(0, 40, 0, 0)],
+            [new HslaColor(0, 50, 0, 0), 100, new HslaColor(0, 100, 0, 0)],
+            [new HslaColor(0, 50, 0, 0), -100, new HslaColor(0, 0, 0, 0)],
         ];
     }
 
@@ -205,13 +202,13 @@ class ColorTest extends TestCase
         self::assertTrue($adjusted->equals($expectation));
     }
 
-    public function hueAdjustmentWorksDataProvider():array
+    public function hueAdjustmentWorksDataProvider(): array
     {
         return [
-            [new HslaColor(100,0,0,0),10,new HslaColor(110,0,0,0)],
-            [new HslaColor(100,0,0,0),-10,new HslaColor(90,0,0,0)],
-            [new HslaColor(100,0,0,0),-150,new HslaColor(310,0,0,0)],
-            [new HslaColor(100,0,0,0),+300,new HslaColor(40,0,0,0)]
+            [new HslaColor(100, 0, 0, 0), 10, new HslaColor(110, 0, 0, 0)],
+            [new HslaColor(100, 0, 0, 0), -10, new HslaColor(90, 0, 0, 0)],
+            [new HslaColor(100, 0, 0, 0), -150, new HslaColor(310, 0, 0, 0)],
+            [new HslaColor(100, 0, 0, 0), +300, new HslaColor(40, 0, 0, 0)],
         ];
     }
 
@@ -225,17 +222,17 @@ class ColorTest extends TestCase
         self::assertTrue($adjustedColor->equals($expectation));
     }
 
-    public function alphaAdjustmentWorksColorsDataProvider():array
+    public function alphaAdjustmentWorksColorsDataProvider(): array
     {
         return [
-            [new HslaColor(0,0,0,50),10,new HslaColor(0,0,0,60)],
-            [new HslaColor(0,0,0,50),-10,new HslaColor(0,0,0,40)],
-            [new HslaColor(0,0,0,50),250,new HslaColor(0,0,0,255)],
-            [new HslaColor(0,0,0,50),-100,new HslaColor(0,0,0,0)],
-            [new RgbaColor(0,0,0,50),10,new RgbaColor(0,0,0,60)],
-            [new RgbaColor(0,0,0,50),-10,new RgbaColor(0,0,0,40)],
-            [new RgbaColor(0,0,0,50),250,new RgbaColor(0,0,0,255)],
-            [new RgbaColor(0,0,0,50),-100,new RgbaColor(0,0,0,0)]
+            [new HslaColor(0, 0, 0, 50), 10, new HslaColor(0, 0, 0, 60)],
+            [new HslaColor(0, 0, 0, 50), -10, new HslaColor(0, 0, 0, 40)],
+            [new HslaColor(0, 0, 0, 50), 250, new HslaColor(0, 0, 0, 255)],
+            [new HslaColor(0, 0, 0, 50), -100, new HslaColor(0, 0, 0, 0)],
+            [new RgbaColor(0, 0, 0, 50), 10, new RgbaColor(0, 0, 0, 60)],
+            [new RgbaColor(0, 0, 0, 50), -10, new RgbaColor(0, 0, 0, 40)],
+            [new RgbaColor(0, 0, 0, 50), 250, new RgbaColor(0, 0, 0, 255)],
+            [new RgbaColor(0, 0, 0, 50), -100, new RgbaColor(0, 0, 0, 0)],
         ];
     }
 
