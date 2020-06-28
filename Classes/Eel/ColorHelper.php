@@ -64,7 +64,8 @@ class ColorHelper implements ProtectedContextAwareInterface
 
     /**
      * @param ColorHelper $color
-     * @param int $weight
+     * @param int         $weight
+     *
      * @return ColorHelper
      */
     public function mix(self $color, int $weight = 50): self
