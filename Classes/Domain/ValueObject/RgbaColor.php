@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
-class RgbaColor implements ColorInterface
+class RgbaColor extends AbstractColor implements ColorInterface
 {
 
     /**
@@ -87,25 +87,6 @@ class RgbaColor implements ColorInterface
     }
 
     /**
-     * @return string
-     */
-    public function getHex():string
-    {
-        if ($this->alpha == 255) {
-            return '#'
-                . str_pad(dechex($this->red), 2, '0')
-                . str_pad(dechex($this->green), 2, '0')
-                . str_pad(dechex($this->blue), 2, '0');
-        } else {
-            return '#'
-                . str_pad(dechex($this->red), 2, '0')
-                . str_pad(dechex($this->green), 2, '0')
-                . str_pad(dechex($this->blue), 2, '0')
-                . str_pad(dechex($this->alpha), 2, '0');
-        }
-    }
-
-    /**
      * @return RgbaColor
      */
     public function asRgba(): RgbaColor
@@ -155,6 +136,24 @@ class RgbaColor implements ColorInterface
             (int)round($saturation),
             (int)round($lightness),
             $this->alpha
+        );
+    }
+
+    /**
+     * @param int $delta
+     * @return ColorInterface
+     */
+    public function withAdjustedAlpha(int $delta): ColorInterface
+    {
+        $alpha = $this->getAlpha() + $delta;
+        if ($alpha < 0) $alpha = 0;
+        if ($alpha > 255) $alpha = 255;
+
+        return new RgbaColor(
+            $this->red,
+            $this->green,
+            $this->blue,
+            $alpha
         );
     }
 }

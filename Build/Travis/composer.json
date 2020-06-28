@@ -1,0 +1,31 @@
+{
+    "name": "packagefactory/atomicfusion-proptypes-test-distribution",
+    "description": "Flow test distribution for PackageFactory.AtomicFusion.PropTypes",
+    "license": "MIT",
+    "config": {
+        "vendor-dir": "Packages/Libraries",
+        "bin-dir": "bin"
+    },
+    "require": {
+        "php": "^7.2",
+        "neos/flow": "~6.0.0",
+        "neos/fusion": "~5.0.0",
+        "packagefactory/colorhelper": "*"
+    },
+    "require-dev": {
+        "neos/buildessentials": "6.0.x-dev",
+        "mikey179/vfsstream": "^1.6",
+        "phpunit/phpunit": "^8.1",
+        "symfony/css-selector": "~2.0",
+        "neos/behat": "@dev"
+    },
+    "suggest": {
+        "ext-pdo_sqlite": "For running functional tests out-of-the-box this is required"
+    },
+    "scripts": {
+        "post-update-cmd": "Neos\\Flow\\Composer\\InstallerScripts::postUpdateAndInstall",
+        "post-install-cmd": "Neos\\Flow\\Composer\\InstallerScripts::postUpdateAndInstall",
+        "post-package-update": "Neos\\Flow\\Composer\\InstallerScripts::postPackageUpdateAndInstall",
+        "post-package-install": "Neos\\Flow\\Composer\\InstallerScripts::postPackageUpdateAndInstall"
+    }
+}

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
-class HslaColor implements ColorInterface
+class HslaColor extends AbstractColor implements ColorInterface
 {
 
     /**
@@ -144,5 +144,23 @@ class HslaColor implements ColorInterface
     public function asHsla(): HslaColor
     {
         return $this;
+    }
+
+    /**
+     * @param int $delta
+     * @return ColorInterface
+     */
+    public function withAdjustedAlpha(int $delta): ColorInterface
+    {
+        $alpha = $this->getAlpha() + $delta;
+        if ($alpha < 0) $alpha = 0;
+        if ($alpha > 255) $alpha = 255;
+
+        return new HslaColor(
+            $this->hue,
+            $this->saturation,
+            $this->lightness,
+            $alpha
+        );
     }
 }
