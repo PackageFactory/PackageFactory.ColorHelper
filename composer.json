@@ -30,7 +30,7 @@
             "Build/Travis/bin/phpunit --verbose -c Build/Travis/unit-tests.xml"
         ],
         "test": [
-            "composer test:unit",
+            "composer test:unit"
         ]
     }
 }

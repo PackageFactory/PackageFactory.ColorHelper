@@ -61,7 +61,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
             );
-        } elseif (preg_match(self::PATTERN_HEX_LONG, $colorString, $matches)) {
+        } elseif (preg_match(self::PATTERN_HEX_LONG, $hex, $matches)) {
             $red = hexdec($matches['red']);
             $green = hexdec($matches['green']);
             $blue = hexdec($matches['blue']);
