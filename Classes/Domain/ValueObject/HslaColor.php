@@ -93,33 +93,40 @@ class HslaColor extends AbstractColor implements ColorInterface
     {
         $S = $this->saturation / 100;
         $L = $this->lightness / 100;
+        $H = $this->hue;
+
         $C = (1 - abs((2 * $L) - 1)) * $S;
-        $X = $C * (1 - abs((($this->hue / 60) % 2) - 1));
+        $X = $C * (1 - abs((($H / 60) % 2) - 1));
         $m = $L - ($C / 2);
+
+        if ($S == 0) {
+            $rgb = (int) round($L * 255);
+            return new RgbaColor($rgb, $rgb, $rgb, $this->alpha);
+        }
 
         if ($this->hue < 0) {
             throw new \UnexpectedValueException('this should never be thrown');
-        } elseif ($this->hue < 60) {
+        } elseif ($H < 60) {
             $r = $C;
             $g = $X;
             $b = 0;
-        } elseif ($this->hue < 120) {
+        } elseif ($H < 120) {
             $r = $X;
             $g = $C;
             $b = 0;
-        } elseif ($this->hue < 180) {
+        } elseif ($H < 180) {
             $r = 0;
             $g = $C;
             $b = $X;
-        } elseif ($this->hue < 240) {
+        } elseif ($H < 240) {
             $r = 0;
             $g = $X;
             $b = $C;
-        } elseif ($this->hue < 300) {
+        } elseif ($H < 300) {
             $r = $X;
             $g = 0;
             $b = $C;
-        } elseif ($this->hue < 360) {
+        } elseif ($H < 360) {
             $r = $C;
             $g = 0;
             $b = $X;
@@ -142,7 +149,7 @@ class HslaColor extends AbstractColor implements ColorInterface
     /**
      * @return HslaColor
      */
-    public function asHsla(): self
+    public function asHsla(): HslaColor
     {
         return $this;
     }

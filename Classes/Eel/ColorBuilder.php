@@ -8,13 +8,13 @@ use PackageFactory\ColorHelper\Domain\ValueObject\RgbaColor;
 
 class ColorBuilder implements ProtectedContextAwareInterface
 {
-    const PATTERN_HEX_LONG = '/^#?(?<red>[0-9abcdefABCDEF]{2})(?<green>[0-9abcdefABCDEF]{2})(?<blue>[0-9abcdefABCDEF]{2})(?:(?<alpha>[0-9abcdefABCDEF]{2}))?^$/u';
+    const PATTERN_HEX_LONG = '/^#(?<red>[0-9abcdef]{2})(?<green>[0-9abcdef]{2})(?<blue>[0-9abcdef]{2})(?:(?<alpha>[0-9abcdef]{2}))?$/';
 
-    const PATTERN_HEX_SHORT = '/#?(?<red>[0-9abcdefABCDEF]{1})(?<green>[0-9abcdefABCDEF]{1})(?<blue>[0-9abcdefABCDEF]{1})(?:(?<alpha>[0-9abcdefABCDEF]{1}))?$/u';
+    const PATTERN_HEX_SHORT = '/^#(?<red>[0-9abcdef]{1})(?<green>[0-9abcdef]{1})(?<blue>[0-9abcdef]{1})(?:(?<alpha>[0-9abcdef]{1}))?$/u';
 
     const PATTERN_RGBA = '/^rgba?\\s*\\(\\s*(?<red>[0-9\\.]+%?)\\s*,?\\s*(?<green>[0-9\\.]+%?)\\s*,?\\s*(?<blue>[0-9\\.]+%?)\\s*(?:,?\\s*(?<alpha>[0-9\\.]+%?)\\s*)?\\)$/u';
 
-    const PATTERN_HSLA = '/hsla?\\s*\\(\\s*(?<hue>[0-9\\.]+)\\s*,?\\s*(?<saturation>[0-9\\.]+%)\\s*,?\\s*(?<lightness>[0-9\\.]+%)\\s*(?:,?\\s*(?<alpha>[0-9\\.]+%?)\\s*)?\\)$/u';
+    const PATTERN_HSLA = '/^hsla?\\s*\\(\\s*(?<hue>[0-9\\.]+)\\s*,?\\s*(?<saturation>[0-9\\.]+%)\\s*,?\\s*(?<lightness>[0-9\\.]+%)\\s*(?:,?\\s*(?<alpha>[0-9\\.]+%?)\\s*)?\\)$/u';
 
     /**
      * @param int $red   0-255
@@ -35,14 +35,13 @@ class ColorBuilder implements ProtectedContextAwareInterface
      * @param int $hue        0-355
      * @param int $saturatiom 0-100
      * @param int $lightness  0-100
-     * @param int $alpha      0-100
+     * @param float $alpha      0-1
      *
      * @return ColorHelper
      */
-    public function hsl(int $hue, int $saturatiom, int $lightness, int $alpha = 100): ColorHelper
+    public function hsl(int $hue, int $saturatiom, int $lightness, float $alpha = 1): ColorHelper
     {
-        $alpha = (int) round($alpha / 100 * 255);
-
+        $alpha = (int) round($alpha * 255);
         return new ColorHelper(
             new HslaColor($hue, $saturatiom, $lightness, $alpha)
         );
@@ -55,7 +54,9 @@ class ColorBuilder implements ProtectedContextAwareInterface
      */
     public function hex(string $hex): ?ColorHelper
     {
+        $hex = strtolower($hex);
         if (preg_match(self::PATTERN_HEX_SHORT, $hex, $matches)) {
+
             $red = (int) hexdec($matches['red'].$matches['red']);
             $green = (int) hexdec($matches['green'].$matches['green']);
             $blue = (int) hexdec($matches['blue'].$matches['blue']);
@@ -65,6 +66,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
                 new RgbaColor($red, $green, $blue, $alpha)
             );
         } elseif (preg_match(self::PATTERN_HEX_LONG, $hex, $matches)) {
+
             $red = (int) hexdec($matches['red']);
             $green = (int) hexdec($matches['green']);
             $blue = (int) hexdec($matches['blue']);
@@ -87,6 +89,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
      */
     public function css(string $colorString): ?ColorHelper
     {
+        $colorString = strtolower($colorString);
         if (preg_match(self::PATTERN_HEX_SHORT, $colorString, $matches)) {
             $red = (int) hexdec($matches['red'].$matches['red']);
             $green = (int) hexdec($matches['green'].$matches['green']);
@@ -100,7 +103,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = (int) hexdec($matches['red']);
             $green = (int) hexdec($matches['green']);
             $blue = (int) hexdec($matches['blue']);
-            $alpha = (int) hexdec($matches['alpha'] ? $matches['alpha'] : 'ff');
+            $alpha = (int) hexdec(isset($matches['alpha']) ? $matches['alpha'] : 'ff');
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)

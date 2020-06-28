@@ -48,6 +48,62 @@ class ColorTest extends TestCase
         self::assertEquals($hsl[2], $hslColor->getLightness());
     }
 
+    public function conversionOfRgbToHslAndBackWorksDataProvider():array
+    {
+        $interval=20;
+        $testArgumentSets = [];
+        for ($r = 0; $r < 256; $r+=$interval) {
+            for ($g = 0; $g < 256; $g+=$interval) {
+                for ($b = 0; $b < 256; $b+=$interval) {
+                    $testArgumentSets[] = [$r,$g,$b];
+                }
+            }
+        }
+        return $testArgumentSets;
+    }
+
+    /**
+     * @__test__
+     * @dataProvider conversionOfRgbToHslAndBackWorksDataProvider
+     */
+    public function conversionOfRgbToHslAndBackWorks(int $r, int $g, int $b)
+    {
+        $original = new RgbaColor($r, $g, $b);
+        $converted = $original->asHsla()->asRgba();
+        self::assertEquals(
+            [$original->getRed(), $original->getGreen(), $original->getBlue()],
+            [$converted->getRed(), $converted->getGreen(), $converted->getBlue()]
+        );
+    }
+
+    public function conversionOfHslToRgbAndBackWorksDataProvider():array
+    {
+        $interval=20;
+        $testArgumentSets = [];
+        for ($h = 0; $h < 360; $h+=$interval) {
+            for ($l = 0; $l < 100; $l+=$interval) {
+                for ($s = 0; $s < 100; $s+=$interval) {
+                    $testArgumentSets[] = [$h, $s, $l];
+                }
+            }
+        }
+        return $testArgumentSets;
+    }
+
+    /**
+     * @__test__
+     * @dataProvider conversionOfHslToRgbAndBackWorksDataProvider
+     */
+    public function conversionOfHslToRgbAndBackWorks(int $h, int $s, int $l)
+    {
+        $original = new HslaColor($h, $l, $s);
+        $converted = $original->asRgba()->asHsla();
+        self::assertEquals(
+            [$original->getHue(), $original->getSaturation(), $original->getLightness()],
+            [$converted->getHue(), $converted->getSaturation(), $converted->getLightness()]
+        );
+    }
+
     /**
      * @test
      * @dataProvider getColorFixtures

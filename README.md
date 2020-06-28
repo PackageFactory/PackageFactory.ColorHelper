@@ -7,7 +7,7 @@ The package provides the `Color` helper that exposes the following methods to Fu
 
 Colors can be created from hex, rgb and hsl values
 - `color = ${ Color.hex('#80e619') }`  expects a hex string of 3 or 6 chars
-- `color = ${ Color.rgb(100, 0, 256) }` expects three integers each between 0 and 255
+- `color = ${ Color.rgb(100, 0, 255) }` expects three integers each between 0 and 255
 - `color = ${ Color.hsl(156, 25, 75) }` expects three integers a degree 0-355 and two percent values 0-100 
 
 The methods rgb and hsl allow to specify the alpha as fourth argument 

@@ -10,7 +10,7 @@
 		timeoutForSmallTests="0">
 	<testsuites>
 		<testsuite name="All tests">
-			<directory>Packages/Application/PackageFactory.AtomicFusion.PropTypes/Tests/Functional</directory>
+			<directory>Packages/Application/PackageFactory.ColorHelper/Tests/Functional</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
