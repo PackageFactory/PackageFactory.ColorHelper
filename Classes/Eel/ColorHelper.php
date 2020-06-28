@@ -1,4 +1,5 @@
 <?php
+
 namespace PackageFactory\ColorHelper\Eel;
 
 use Neos\Eel\ProtectedContextAwareInterface;
@@ -6,9 +7,8 @@ use PackageFactory\ColorHelper\Domain\ValueObject\ColorInterface;
 
 class ColorHelper implements ProtectedContextAwareInterface
 {
-
     /**
-     * Default adjustments for color manipulations
+     * Default adjustments for color manipulations.
      */
     const DEFAULT_ADJUSTMENT = 10;
 
@@ -49,87 +49,94 @@ class ColorHelper implements ProtectedContextAwareInterface
 
     /**
      * @param ColorHelper $color
-     * @param int $weight between 0 and 100
+     * @param int         $weight between 0 and 100
+     *
      * @return string
      */
-    public function mix(ColorHelper $color, int $weight = 50): self
+    public function mix(self $color, int $weight = 50): self
     {
-        return new self ($this->color->withMixedColor($color->getColor(), $weight));
+        return new self($this->color->withMixedColor($color->getColor(), $weight));
     }
 
     /**
      * @param int $amount between 0 and 100
+     *
      * @return string
      */
-    public function lighten(int $amount = self::DEFAULT_ADJUSTMENT ): self
+    public function lighten(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
-        return new self ($this->color->withAdjustedLightness($amount));
+        return new self($this->color->withAdjustedLightness($amount));
     }
 
     /**
      * @param int $amount between 0 and 100
+     *
      * @return string
      */
-    public function darken(int $amount = self::DEFAULT_ADJUSTMENT ): self
+    public function darken(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
-        return new self ($this->color->withAdjustedLightness(-1 * $amount));
+        return new self($this->color->withAdjustedLightness(-1 * $amount));
     }
-
 
     /**
      * Adjust the value by rotating the hue angle of a color in either direction.
      *
      * @param int $amount degrees to rotate the color
+     *
      * @return string
      */
     public function spin(int $amount): self
     {
-        return new self ($this->color->withAdjustedHue($amount));
+        return new self($this->color->withAdjustedHue($amount));
     }
 
     /**
      * @param int $amount to saturate the color
+     *
      * @return string
      */
     public function saturate(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
-        return new self ($this->color->withAdjustedSaturation($amount));
+        return new self($this->color->withAdjustedSaturation($amount));
     }
 
     /**
      * @param int $amount to desaturate the color
+     *
      * @return string
      */
     public function desaturate(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
-        return new self ($this->color->withAdjustedSaturation(-1 * $amount));
+        return new self($this->color->withAdjustedSaturation(-1 * $amount));
     }
 
     /**
      * @param int $amount to desaturate the color
+     *
      * @return string
      */
     public function fadein(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
-        return new self ($this->color->withAdjustedAlpha($amount));
+        return new self($this->color->withAdjustedAlpha($amount));
     }
 
     /**
      * @param int $amount to desaturate the color
+     *
      * @return string
      */
     public function fadeout(int $amount = self::DEFAULT_ADJUSTMENT): self
     {
-        return new self ($this->color->withAdjustedAlpha(-1 * $amount));
+        return new self($this->color->withAdjustedAlpha(-1 * $amount));
     }
 
     /**
      * @param string $methodName
+     *
      * @return bool
      */
     public function allowsCallOfMethod($methodName): bool
     {
         return true;
     }
-
 }
