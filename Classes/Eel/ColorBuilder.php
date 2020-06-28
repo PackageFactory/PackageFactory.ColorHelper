@@ -59,7 +59,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = (int) hexdec($matches['red'].$matches['red']);
             $green = (int) hexdec($matches['green'].$matches['green']);
             $blue = (int) hexdec($matches['blue'].$matches['blue']);
-            $alpha = (int) hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : "ff");
+            $alpha = (int) hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : 'ff');
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -68,7 +68,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = (int) hexdec($matches['red']);
             $green = (int) hexdec($matches['green']);
             $blue = (int) hexdec($matches['blue']);
-            $alpha = (int) hexdec($matches['alpha'] ?? "ff");
+            $alpha = (int) hexdec($matches['alpha'] ?? 'ff');
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -91,7 +91,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = (int) hexdec($matches['red'].$matches['red']);
             $green = (int) hexdec($matches['green'].$matches['green']);
             $blue = (int) hexdec($matches['blue'].$matches['blue']);
-            $alpha = (int) hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : "ff");
+            $alpha = (int) hexdec(isset($matches['alpha']) ? $matches['alpha'].$matches['alpha'] : 'ff');
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -100,7 +100,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = (int) hexdec($matches['red']);
             $green = (int) hexdec($matches['green']);
             $blue = (int) hexdec($matches['blue']);
-            $alpha = (int) hexdec($matches['alpha'] ? $matches['alpha'] : "ff");
+            $alpha = (int) hexdec($matches['alpha'] ? $matches['alpha'] : 'ff');
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
