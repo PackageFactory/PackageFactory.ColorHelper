@@ -98,22 +98,6 @@ class RgbaColor extends AbstractColor implements ColorInterface
     }
 
     /**
-     * @param ColorInterface $color
-     * @param float $maxDist
-     * @return bool
-     */
-    public function isSimilarTo(ColorInterface $color, float $maxDist = 5): bool
-    {
-        $color = $color->asRgba();
-        return (
-            abs($this->getRed() - $color->getRed()) < $maxDist
-            && abs($this->getGreen() - $color->getGreen()) < $maxDist
-            && abs($this->getBlue() - $color->getBlue()) < $maxDist
-            && abs($this->getAlpha() - $color->getAlpha()) < $maxDist
-        );
-    }
-
-    /**
      * @return HslaColor
      * @see http://en.wikipedia.org/wiki/HSL_color_space.
      * @see https://gist.github.com/mjackson/5311256

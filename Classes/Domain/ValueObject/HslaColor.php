@@ -137,25 +137,7 @@ class HslaColor extends AbstractColor implements ColorInterface
         return $this;
     }
 
-    /**
-     * @param ColorInterface $color
-     * @param float $maxDist
-     * @return bool
-     */
-    public function isSimilarTo(ColorInterface $color, float $maxDist = 5): bool
-    {
-        $color = $color->asHsla();
 
-        $deltaH1 = abs($this->getHue() - $color->getHue());
-        $deltH12 = 360 - $color->getHue() + $this->getHue();
-
-        return (
-            min($deltaH1, $deltH12) < $maxDist
-            && abs($this->getSaturation() - $color->getSaturation()) < $maxDist
-            && abs($this->getLightness() - $color->getLightness()) < $maxDist
-            && abs($this->getAlpha() - $color->getAlpha()) < ($maxDist / 100)
-        );
-    }
 
     /**
      * @param float $delta 0..100

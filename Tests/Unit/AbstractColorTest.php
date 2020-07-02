@@ -83,10 +83,12 @@ abstract class AbstractColorTest extends TestCase
      */
     protected function assertSimilarColor(ColorInterface $expected, ColorInterface $color, string $message = null) {
         $this->addToAssertionCount(1);
-        if ($color->isSimilarTo($expected) == false) {
-            if ($this->expectecColor instanceof RgbaColor) {
+        if ($expected instanceof RgbaColor) {
+            if (!$this->isSimilarRgba($expected, $color)) {
                 $this->fail( $message ?? $color->getRgbaString() . ' is not similar to ' . $expected->getRgbaString());
-            } elseif ($this->expectecColor instanceof HslaColor) {
+            }
+        } elseif ($expected instanceof HslaColor) {
+            if (!$this->isSimilarHsla($expected, $color)) {
                 $this->fail( $message ?? $color->getHslaString() . ' is not similar to ' . $expected->getHslaString());
             }
         }
@@ -101,11 +103,55 @@ abstract class AbstractColorTest extends TestCase
         if (get_class($expected) != get_class($color)) {
             $this->fail( $message ?? get_class($expected) . ' is not the same as ' . get_class($color));
         } elseif ($color->equals($expected) == false) {
-            if ($this->expectecColor instanceof RgbaColor) {
-                $this->fail( $message ?? $color->getRgbaString() . ' is not similar to ' . $expected->getRgbaString());
-            } elseif ($this->expectecColor instanceof HslaColor) {
-                $this->fail( $message ?? $color->getHslaString() . ' is not similar to ' . $expected->getHslaString());
+            if ($expected instanceof RgbaColor) {
+                if (!$this->isSimilarRgba($expected, $color, 0)) {
+                    $this->fail( $message ?? $color->getRgbaString() . ' is not equal to ' . $expected->getRgbaString());
+                }
+            } elseif ($expected instanceof HslaColor) {
+                if (!$this->isSimilarHsla($expected, $color, 0)) {
+                    $this->fail( $message ?? $color->getHslaString() . ' is not equal to ' . $expected->getHslaString());
+                }
             }
         }
+    }
+
+    /**
+     * @param ColorInterface $a
+     * @param ColorInterface $a
+     * @param float $maxDist
+     * @return bool
+     */
+    protected function isSimilarHsla(ColorInterface $a, ColorInterface $b, float $maxDist = 5): bool
+    {
+        $a = $a->asHsla();
+        $b = $b->asHsla();
+
+        $deltaH1 = abs($b->getHue() - $a->getHue());
+        $deltH12 = 360 - $a->getHue() + $b->getHue();
+
+        return (
+            min($deltaH1, $deltH12) < $maxDist
+            && abs($b->getSaturation() - $a->getSaturation()) < $maxDist
+            && abs($b->getLightness() - $a->getLightness()) < $maxDist
+            && abs($b->getAlpha() - $a->getAlpha()) < ($maxDist / 100)
+        );
+    }
+
+    /**
+     * @param ColorInterface $a
+     * @param ColorInterface $a
+     * @param float $maxDist
+     * @return bool
+     */
+    public function isSimilarRgba(ColorInterface $a, ColorInterface $b, float $maxDist = 5): bool
+    {
+        $a = $a->asRgba();
+        $b = $b->asRgba();
+        return (
+            abs($b->getRed() - $a->getRed()) < $maxDist
+            && abs($b->getGreen() - $a->getGreen()) < $maxDist
+            && abs($b->getBlue() - $a->getBlue()) < $maxDist
+            && abs($b->getAlpha() - $a->getAlpha()) < $maxDist
+        );
     }
 }

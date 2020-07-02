@@ -17,20 +17,6 @@ interface ColorInterface
     public function asHsla(): HslaColor;
 
     /**
-     * @param ColorInterface $color
-     *
-     * @return bool
-     */
-    public function equals(self $color): bool;
-
-    /**
-     * @param ColorInterface $color
-     * @param float $maxDist
-     * @return bool
-     */
-    public function isSimilarTo(ColorInterface $color, float $maxDist = 2): bool;
-
-    /**
      * @return string
      */
     public function __toString(): string;
