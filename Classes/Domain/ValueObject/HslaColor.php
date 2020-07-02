@@ -88,6 +88,7 @@ class HslaColor extends AbstractColor implements ColorInterface
 
     /**
      * @return RgbaColor
+     *
      * @see http://en.wikipedia.org/wiki/HSL_color_space.
      * @see https://gist.github.com/mjackson/5311256
      */
@@ -100,15 +101,16 @@ class HslaColor extends AbstractColor implements ColorInterface
 
         if ($s == 0) {
             $rgb = $l * 255;
+
             return new RgbaColor($rgb, $rgb, $rgb, $this->alpha * 255);
         }
 
         $q = $l < 0.5 ? $l * (1 + $s) : $l + $s - $l * $s;
         $p = 2 * $l - $q;
 
-        $r = $this->hue2rgb($p, $q, $h + 1/3);
+        $r = $this->hue2rgb($p, $q, $h + 1 / 3);
         $g = $this->hue2rgb($p, $q, $h);
-        $b = $this->hue2rgb($p, $q, $h - 1/3);
+        $b = $this->hue2rgb($p, $q, $h - 1 / 3);
 
         return new RgbaColor($r * 255, $g * 255, $b * 255, $a * 255);
     }
@@ -117,27 +119,37 @@ class HslaColor extends AbstractColor implements ColorInterface
      * @param float $p
      * @param float $q
      * @param float $t
+     *
      * @return float
      */
     private function hue2rgb(float $p, float $q, float $t): float
     {
-        if($t < 0) $t += 1;
-        if($t > 1) $t -= 1;
-        if($t < 1/6) return $p + ($q - $p) * 6 * $t;
-        if($t < 1/2) return $q;
-        if($t < 2/3) return $p + ($q - $p) * (2/3 - $t) * 6;
+        if ($t < 0) {
+            $t += 1;
+        }
+        if ($t > 1) {
+            $t -= 1;
+        }
+        if ($t < 1 / 6) {
+            return $p + ($q - $p) * 6 * $t;
+        }
+        if ($t < 1 / 2) {
+            return $q;
+        }
+        if ($t < 2 / 3) {
+            return $p + ($q - $p) * (2 / 3 - $t) * 6;
+        }
+
         return $p;
     }
 
     /**
      * @return HslaColor
      */
-    public function asHsla(): HslaColor
+    public function asHsla(): self
     {
         return $this;
     }
-
-
 
     /**
      * @param float $delta 0..100

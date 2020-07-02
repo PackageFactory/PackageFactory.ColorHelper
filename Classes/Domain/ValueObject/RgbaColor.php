@@ -92,13 +92,14 @@ class RgbaColor extends AbstractColor implements ColorInterface
     /**
      * @return RgbaColor
      */
-    public function asRgba(): RgbaColor
+    public function asRgba(): self
     {
         return $this;
     }
 
     /**
      * @return HslaColor
+     *
      * @see http://en.wikipedia.org/wiki/HSL_color_space.
      * @see https://gist.github.com/mjackson/5311256
      */
@@ -116,7 +117,6 @@ class RgbaColor extends AbstractColor implements ColorInterface
         if ($max == $min) {
             $h = $s = 0;
         } else {
-
             $d = $max - $min;
             $s = $l > 0.5 ? $d / (2 - $max - $min) : $d / ($max + $min);
 
@@ -138,7 +138,6 @@ class RgbaColor extends AbstractColor implements ColorInterface
             $this->alpha / 255
         );
     }
-
 
     /**
      * @param float $delta

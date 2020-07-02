@@ -55,7 +55,6 @@ class ColorBuilder implements ProtectedContextAwareInterface
     {
         $hex = strtolower($hex);
         if (preg_match(self::PATTERN_HEX_SHORT, $hex, $matches)) {
-
             $red = hexdec($matches['red'].$matches['red']);
             $green = hexdec($matches['green'].$matches['green']);
             $blue = hexdec($matches['blue'].$matches['blue']);
@@ -65,7 +64,6 @@ class ColorBuilder implements ProtectedContextAwareInterface
                 new RgbaColor($red, $green, $blue, $alpha)
             );
         } elseif (preg_match(self::PATTERN_HEX_LONG, $hex, $matches)) {
-
             $red = hexdec($matches['red']);
             $green = hexdec($matches['green']);
             $blue = hexdec($matches['blue']);
@@ -75,6 +73,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
                 new RgbaColor($red, $green, $blue, $alpha)
             );
         }
+
         return null;
     }
 
@@ -141,16 +140,26 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $number = (int) (
                 substr($value, 0, -1)
             );
+
             return $max * ($number / 100);
         } else {
             $value = (float) $value;
             if ($circle) {
-                if ($value < 0) $value = $max + ($value % $max);
-                if ($value > $max) $value = $value % $max;
+                if ($value < 0) {
+                    $value = $max + ($value % $max);
+                }
+                if ($value > $max) {
+                    $value = $value % $max;
+                }
             } else {
-                if ($value < 0) $value = 0;
-                if ($value > $max) $value = $max;
+                if ($value < 0) {
+                    $value = 0;
+                }
+                if ($value > $max) {
+                    $value = $max;
+                }
             }
+
             return $value;
         }
     }
