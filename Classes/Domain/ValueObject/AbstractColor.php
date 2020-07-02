@@ -22,15 +22,15 @@ abstract class AbstractColor implements ColorInterface
         $rgba = $this->asRgba();
         if ($rgba->getAlpha() == 255) {
             return '#'
-                .str_pad(dechex((int)round($rgba->getRed())), 2, '0')
-                .str_pad(dechex((int)round($rgba->getGreen())), 2, '0')
-                .str_pad(dechex((int)round($rgba->getBlue())), 2, '0');
+                .str_pad(dechex((int) round($rgba->getRed())), 2, '0')
+                .str_pad(dechex((int) round($rgba->getGreen())), 2, '0')
+                .str_pad(dechex((int) round($rgba->getBlue())), 2, '0');
         } else {
             return '#'
-                .str_pad(dechex((int)round($rgba->getRed())), 2, '0')
-                .str_pad(dechex((int)round($rgba->getGreen())), 2, '0')
-                .str_pad(dechex((int)round($rgba->getBlue())), 2, '0')
-                .str_pad(dechex((int)round($rgba->getAlpha())), 2, '0');
+                .str_pad(dechex((int) round($rgba->getRed())), 2, '0')
+                .str_pad(dechex((int) round($rgba->getGreen())), 2, '0')
+                .str_pad(dechex((int) round($rgba->getBlue())), 2, '0')
+                .str_pad(dechex((int) round($rgba->getAlpha())), 2, '0');
         }
     }
 

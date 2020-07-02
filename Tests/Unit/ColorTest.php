@@ -1,4 +1,5 @@
 <?php
+
 namespace PackageFactory\ColorHelper\Tests\Unit;
 
 use PackageFactory\ColorHelper\Domain\ValueObject\ColorInterface;
@@ -7,7 +8,6 @@ use PackageFactory\ColorHelper\Domain\ValueObject\RgbaColor;
 
 class ColorTest extends AbstractColorTest
 {
-
     /**
      * @test
      * @dataProvider rgbSpectrumDataProvider
@@ -40,7 +40,7 @@ class ColorTest extends AbstractColorTest
         $hsl = $colorFixture['hsl'];
         $rgbColor = new RgbaColor($rgb[0], $rgb[1], $rgb[2]);
         $hslColor = $rgbColor->asHsla();
-        $expectation = new HslaColor($hsl[0],$hsl[1],$hsl[2]);
+        $expectation = new HslaColor($hsl[0], $hsl[1], $hsl[2]);
         self::assertSimilarColor($hslColor, $expectation);
     }
 
@@ -155,7 +155,6 @@ class ColorTest extends AbstractColorTest
     {
         $mixed = $colorA->withMixedColor($colorB, $weight)->asRgba();
         self::assertSimilarColor($mixed, $expectation);
-
     }
 
     public function lightnessAdjustmentWorksDataProvider(): array
