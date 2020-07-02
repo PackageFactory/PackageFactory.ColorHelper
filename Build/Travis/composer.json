@@ -8,8 +8,8 @@
     },
     "require": {
         "php": "^7.2",
-        "neos/flow": "~6.0.0",
-        "neos/fusion": "~5.0.0",
+        "neos/flow": "~6.2.0",
+        "neos/fusion": "~5.2.0",
         "packagefactory/colorhelper": "*"
     },
     "require-dev": {
