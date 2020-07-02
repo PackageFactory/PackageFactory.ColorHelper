@@ -24,6 +24,13 @@ interface ColorInterface
     public function equals(self $color): bool;
 
     /**
+     * @param ColorInterface $color
+     * @param float $maxDist
+     * @return bool
+     */
+    public function isSimilarTo(ColorInterface $color, float $maxDist = 2): bool;
+
+    /**
      * @return string
      */
     public function __toString(): string;
@@ -52,30 +59,30 @@ interface ColorInterface
     public function withMixedColor(self $color, int $weight): self;
 
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedLightness(int $delta): self;
+    public function withAdjustedLightness(float $delta): self;
 
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedSaturation(int $delta): self;
+    public function withAdjustedSaturation(float $delta): self;
 
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedHue(int $delta): self;
+    public function withAdjustedHue(float $delta): self;
 
     /**
-     * @param int $delta
+     * @param float $delta 0..100
      *
      * @return ColorInterface
      */
-    public function withAdjustedAlpha(int $delta): self;
+    public function withAdjustedAlpha(float $delta): self;
 }

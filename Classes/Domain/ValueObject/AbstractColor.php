@@ -22,15 +22,15 @@ abstract class AbstractColor implements ColorInterface
         $rgba = $this->asRgba();
         if ($rgba->getAlpha() == 255) {
             return '#'
-                .str_pad(dechex($rgba->getRed()), 2, '0')
-                .str_pad(dechex($rgba->getGreen()), 2, '0')
-                .str_pad(dechex($rgba->getBlue()), 2, '0');
+                .str_pad(dechex((int)round($rgba->getRed())), 2, '0')
+                .str_pad(dechex((int)round($rgba->getGreen())), 2, '0')
+                .str_pad(dechex((int)round($rgba->getBlue())), 2, '0');
         } else {
             return '#'
-                .str_pad(dechex($rgba->getRed()), 2, '0')
-                .str_pad(dechex($rgba->getGreen()), 2, '0')
-                .str_pad(dechex($rgba->getBlue()), 2, '0')
-                .str_pad(dechex($rgba->getAlpha()), 2, '0');
+                .str_pad(dechex((int)round($rgba->getRed())), 2, '0')
+                .str_pad(dechex((int)round($rgba->getGreen())), 2, '0')
+                .str_pad(dechex((int)round($rgba->getBlue())), 2, '0')
+                .str_pad(dechex((int)round($rgba->getAlpha())), 2, '0');
         }
     }
 
@@ -40,10 +40,10 @@ abstract class AbstractColor implements ColorInterface
     public function getHslaString(): string
     {
         $hslaColor = $this->asHsla();
-        if ($hslaColor->getAlpha() == 255) {
-            return sprintf('hsl(%s, %s%%, %s%%)', $hslaColor->getHue(), $hslaColor->getSaturation(), $hslaColor->getLightness());
+        if ($hslaColor->getAlpha() == 1) {
+            return sprintf('hsl(%s, %s%%, %s%%)', round($hslaColor->getHue()), round($hslaColor->getSaturation()), round($hslaColor->getLightness()));
         } else {
-            return sprintf('hsla(%s, %s%%, %s%%, %s)', $hslaColor->getHue(), $hslaColor->getSaturation(), $hslaColor->getLightness(), round($hslaColor->getAlpha() / 255, 2));
+            return sprintf('hsla(%s, %s%%, %s%%, %s)', round($hslaColor->getHue()), round($hslaColor->getSaturation()), round($hslaColor->getLightness()), round($hslaColor->getAlpha(), 2));
         }
     }
 
@@ -54,9 +54,9 @@ abstract class AbstractColor implements ColorInterface
     {
         $rgbColor = $this->asRgba();
         if ($rgbColor->getAlpha() == 255) {
-            return sprintf('rgb(%s, %s, %s)', $rgbColor->getRed(), $rgbColor->getGreen(), $rgbColor->getBlue());
+            return sprintf('rgb(%s, %s, %s)', round($rgbColor->getRed()), round($rgbColor->getGreen()), round($rgbColor->getBlue()));
         } else {
-            return sprintf('rgba(%s, %s, %s, %s)', $rgbColor->getRed(), $rgbColor->getGreen(), $rgbColor->getBlue(), $rgbColor->getAlpha());
+            return sprintf('rgba(%s, %s, %s, %s)', round($rgbColor->getRed()), round($rgbColor->getGreen()), round($rgbColor->getBlue()), $rgbColor->getAlpha());
         }
     }
 
@@ -97,11 +97,11 @@ abstract class AbstractColor implements ColorInterface
     }
 
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedLightness(int $delta): ColorInterface
+    public function withAdjustedLightness(float $delta): ColorInterface
     {
         $hslaColor = $this->asHsla();
         $lightness = $hslaColor->getLightness() + $delta;
@@ -121,11 +121,11 @@ abstract class AbstractColor implements ColorInterface
     }
 
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedSaturation(int $delta): ColorInterface
+    public function withAdjustedSaturation(float $delta): ColorInterface
     {
         $hslaColor = $this->asHsla();
         $saturation = $hslaColor->getSaturation() + $delta;
@@ -145,11 +145,11 @@ abstract class AbstractColor implements ColorInterface
     }
 
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedHue(int $delta): ColorInterface
+    public function withAdjustedHue(float $delta): ColorInterface
     {
         $hslaColor = $this->asHsla();
         $hue = ($hslaColor->getHue() + $delta) % 360;

@@ -1,36 +1,33 @@
 <?php
-
 namespace PackageFactory\ColorHelper\Tests\Unit;
 
 use PackageFactory\ColorHelper\Domain\ValueObject\ColorInterface;
 use PackageFactory\ColorHelper\Domain\ValueObject\HslaColor;
 use PackageFactory\ColorHelper\Domain\ValueObject\RgbaColor;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Yaml\Yaml;
 
-class ColorTest extends TestCase
+class ColorTest extends AbstractColorTest
 {
-    /**
-     * @return array
-     */
-    public function getColorFixtures(): array
-    {
-        $yaml = Yaml::parseFile(__DIR__.'/Colors.yaml');
-        array_walk(
-            $yaml,
-            function ($item, $name) {
-                $item['name'] = $name;
-            }
-        );
-        $yaml = array_values($yaml);
-        $yaml = array_map(
-            function ($item) {
-                return [$item];
-            },
-            $yaml
-        );
 
-        return $yaml;
+    /**
+     * @test
+     * @dataProvider rgbSpectrumDataProvider
+     */
+    public function conversionOfRgbToHslAndBackWorks(int $r, int $g, int $b)
+    {
+        $original = new RgbaColor($r, $g, $b);
+        $converted = $original->asHsla()->asRgba();
+        self::assertSimilarColor($original, $converted);
+    }
+
+    /**
+     * @test
+     * @dataProvider hlsSpectrumDataProvider
+     */
+    public function conversionOfHslToRgbAndBackWorks(int $h, int $l, int $s)
+    {
+        $original = new HslaColor($h, $l, $s);
+        $converted = $original->asRgba()->asHsla();
+        self::assertSimilarColor($original, $converted);
     }
 
     /**
@@ -43,65 +40,8 @@ class ColorTest extends TestCase
         $hsl = $colorFixture['hsl'];
         $rgbColor = new RgbaColor($rgb[0], $rgb[1], $rgb[2]);
         $hslColor = $rgbColor->asHsla();
-        self::assertEquals($hsl[0], $hslColor->getHue());
-        self::assertEquals($hsl[1], $hslColor->getSaturation());
-        self::assertEquals($hsl[2], $hslColor->getLightness());
-    }
-
-    public function conversionOfRgbToHslAndBackWorksDataProvider():array
-    {
-        $interval=20;
-        $testArgumentSets = [];
-        for ($r = 0; $r < 256; $r+=$interval) {
-            for ($g = 0; $g < 256; $g+=$interval) {
-                for ($b = 0; $b < 256; $b+=$interval) {
-                    $testArgumentSets[] = [$r,$g,$b];
-                }
-            }
-        }
-        return $testArgumentSets;
-    }
-
-    /**
-     * @__test__
-     * @dataProvider conversionOfRgbToHslAndBackWorksDataProvider
-     */
-    public function conversionOfRgbToHslAndBackWorks(int $r, int $g, int $b)
-    {
-        $original = new RgbaColor($r, $g, $b);
-        $converted = $original->asHsla()->asRgba();
-        self::assertEquals(
-            [$original->getRed(), $original->getGreen(), $original->getBlue()],
-            [$converted->getRed(), $converted->getGreen(), $converted->getBlue()]
-        );
-    }
-
-    public function conversionOfHslToRgbAndBackWorksDataProvider():array
-    {
-        $interval=20;
-        $testArgumentSets = [];
-        for ($h = 0; $h < 360; $h+=$interval) {
-            for ($l = 0; $l < 100; $l+=$interval) {
-                for ($s = 0; $s < 100; $s+=$interval) {
-                    $testArgumentSets[] = [$h, $s, $l];
-                }
-            }
-        }
-        return $testArgumentSets;
-    }
-
-    /**
-     * @__test__
-     * @dataProvider conversionOfHslToRgbAndBackWorksDataProvider
-     */
-    public function conversionOfHslToRgbAndBackWorks(int $h, int $s, int $l)
-    {
-        $original = new HslaColor($h, $l, $s);
-        $converted = $original->asRgba()->asHsla();
-        self::assertEquals(
-            [$original->getHue(), $original->getSaturation(), $original->getLightness()],
-            [$converted->getHue(), $converted->getSaturation(), $converted->getLightness()]
-        );
+        $expectation = new HslaColor($hsl[0],$hsl[1],$hsl[2]);
+        self::assertSimilarColor($hslColor, $expectation);
     }
 
     /**
@@ -114,9 +54,8 @@ class ColorTest extends TestCase
         $hsl = $colorFixture['hsl'];
         $hslColor = new HslaColor($hsl[0], $hsl[1], $hsl[2]);
         $rgbColor = $hslColor->asRgba();
-        self::assertEquals($rgb[0], $rgbColor->getRed());
-        self::assertEquals($rgb[1], $rgbColor->getGreen());
-        self::assertEquals($rgb[2], $rgbColor->getBlue());
+        $expectation = new RgbaColor($rgb[0], $rgb[1], $rgb[2]);
+        self::assertSimilarColor($expectation, $rgbColor);
     }
 
     /**
@@ -179,8 +118,8 @@ class ColorTest extends TestCase
             [new HslaColor(320, 20, 50), 'hsl(320, 20%, 50%)'],
             [new HslaColor(50, 80, 80), 'hsl(50, 80%, 80%)'],
             [new HslaColor(320, 20, 50, 0), 'hsla(320, 20%, 50%, 0)'],
-            [new HslaColor(320, 20, 50, 128), 'hsla(320, 20%, 50%, 0.5)'],
-            [new HslaColor(320, 20, 50, 255), 'hsl(320, 20%, 50%)'],
+            [new HslaColor(320, 20, 50, 0.5), 'hsla(320, 20%, 50%, 0.5)'],
+            [new HslaColor(320, 20, 50, 1), 'hsl(320, 20%, 50%)'],
         ];
     }
 
@@ -215,7 +154,8 @@ class ColorTest extends TestCase
     public function colorMixingWorks(ColorInterface $colorA, ColorInterface $colorB, $weight, ColorInterface $expectation)
     {
         $mixed = $colorA->withMixedColor($colorB, $weight)->asRgba();
-        self::assertTrue($mixed->equals($expectation));
+        self::assertSimilarColor($mixed, $expectation);
+
     }
 
     public function lightnessAdjustmentWorksDataProvider(): array
@@ -235,7 +175,7 @@ class ColorTest extends TestCase
     public function lightnessAdjustmentWorks(ColorInterface $color, int $delta, ColorInterface $expectation)
     {
         $adjusted = $color->withAdjustedLightness($delta)->asHsla();
-        self::assertTrue($adjusted->equals($expectation));
+        self::assertSimilarColor($adjusted, $expectation);
     }
 
     public function saturationAdjustmentWorksDataProvider(): array
@@ -255,7 +195,7 @@ class ColorTest extends TestCase
     public function saturationAdjustmentWorks(ColorInterface $color, int $delta, ColorInterface $expectation)
     {
         $adjusted = $color->withAdjustedSaturation($delta)->asHsla();
-        self::assertTrue($adjusted->equals($expectation));
+        self::assertSimilarColor($adjusted, $expectation);
     }
 
     public function hueAdjustmentWorksDataProvider(): array
@@ -275,20 +215,21 @@ class ColorTest extends TestCase
     public function hueAdjustmentWorks(ColorInterface $color, int $delta, ColorInterface $expectation)
     {
         $adjustedColor = $color->withAdjustedHue($delta)->asHsla();
-        self::assertTrue($adjustedColor->equals($expectation));
+        self::assertSimilarColor($adjustedColor, $expectation);
     }
 
     public function alphaAdjustmentWorksColorsDataProvider(): array
     {
         return [
-            [new HslaColor(0, 0, 0, 50), 10, new HslaColor(0, 0, 0, 60)],
-            [new HslaColor(0, 0, 0, 50), -10, new HslaColor(0, 0, 0, 40)],
-            [new HslaColor(0, 0, 0, 50), 250, new HslaColor(0, 0, 0, 255)],
-            [new HslaColor(0, 0, 0, 50), -100, new HslaColor(0, 0, 0, 0)],
-            [new RgbaColor(0, 0, 0, 50), 10, new RgbaColor(0, 0, 0, 60)],
-            [new RgbaColor(0, 0, 0, 50), -10, new RgbaColor(0, 0, 0, 40)],
-            [new RgbaColor(0, 0, 0, 50), 250, new RgbaColor(0, 0, 0, 255)],
-            [new RgbaColor(0, 0, 0, 50), -100, new RgbaColor(0, 0, 0, 0)],
+            [new HslaColor(0, 0, 0, 0.5), 10, new HslaColor(0, 0, 0, 0.6)],
+            [new HslaColor(0, 0, 0, 0.5), -10, new HslaColor(0, 0, 0, 0.4)],
+            [new HslaColor(0, 0, 0, 0.5), 250, new HslaColor(0, 0, 0, 1)],
+            [new HslaColor(0, 0, 0, 0.5), -100, new HslaColor(0, 0, 0, 0)],
+
+            [new RgbaColor(0, 0, 0, 128), 25, new RgbaColor(0, 0, 0, 192)],
+            [new RgbaColor(0, 0, 0, 128), -25, new RgbaColor(0, 0, 0, 64)],
+            [new RgbaColor(0, 0, 0, 128), 250, new RgbaColor(0, 0, 0, 255)],
+            [new RgbaColor(0, 0, 0, 128), -250, new RgbaColor(0, 0, 0, 0)],
         ];
     }
 
@@ -299,6 +240,6 @@ class ColorTest extends TestCase
     public function alphaAdjustmentWorksColors(ColorInterface $color, int $delta, ColorInterface $expectation)
     {
         $adjustedColor = $color->withAdjustedAlpha($delta);
-        self::assertTrue($adjustedColor->equals($expectation));
+        self::assertSimilarColor($adjustedColor, $expectation);
     }
 }

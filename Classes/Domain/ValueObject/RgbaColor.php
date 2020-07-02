@@ -4,37 +4,39 @@ declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
+use mysql_xdevapi\Exception;
+
 class RgbaColor extends AbstractColor implements ColorInterface
 {
     /**
-     * @var int
+     * @var float
      */
     private $red;
 
     /**
-     * @var int
+     * @var float
      */
     private $green;
 
     /**
-     * @var int
+     * @var float
      */
     private $blue;
 
     /**
-     * @var int
+     * @var float
      */
     private $alpha;
 
     /**
      * RgbColor constructor.
      *
-     * @param int $red
-     * @param int $green
-     * @param int $blue
-     * @param int $alpha
+     * @param float $red
+     * @param float $green
+     * @param float $blue
+     * @param float $alpha
      */
-    public function __construct(int $red, int $green, int $blue, int $alpha = 255)
+    public function __construct(float $red, float $green, float $blue, float $alpha = 255)
     {
         if ($red < 0 || $red > 255) {
             throw new \InvalidArgumentException('argument red has to be an integer between 0 and 255');
@@ -56,33 +58,33 @@ class RgbaColor extends AbstractColor implements ColorInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getRed(): int
+    public function getRed(): float
     {
         return $this->red;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getGreen(): int
+    public function getGreen(): float
     {
         return $this->green;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getBlue(): int
+    public function getBlue(): float
     {
         return $this->blue;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getAlpha(): int
+    public function getAlpha(): float
     {
         return $this->alpha;
     }
@@ -96,61 +98,72 @@ class RgbaColor extends AbstractColor implements ColorInterface
     }
 
     /**
+     * @param ColorInterface $color
+     * @param float $maxDist
+     * @return bool
+     */
+    public function isSimilarTo(ColorInterface $color, float $maxDist = 5): bool
+    {
+        $color = $color->asRgba();
+        return (
+            abs($this->getRed() - $color->getRed()) < $maxDist
+            && abs($this->getGreen() - $color->getGreen()) < $maxDist
+            && abs($this->getBlue() - $color->getBlue()) < $maxDist
+            && abs($this->getAlpha() - $color->getAlpha()) < $maxDist
+        );
+    }
+
+    /**
      * @return HslaColor
+     * @see http://en.wikipedia.org/wiki/HSL_color_space.
+     * @see https://gist.github.com/mjackson/5311256
      */
     public function asHsla(): HslaColor
     {
         $r = $this->red / 255;
         $g = $this->green / 255;
         $b = $this->blue / 255;
-        $Cmax = max($r, $g, $b);
-        $Cmin = min($r, $g, $b);
-        $lambda = $Cmax - $Cmin;
-        $l = ($Cmax + $Cmin) / 2;
 
-        if ($lambda == 0) {
-            $hue = 0;
-        } elseif ($Cmax == $r) {
-            $hue = 60 * ((($g - $b) / $lambda) % 6);
-        } elseif ($Cmax == $g) {
-            $hue = 60 * ((($b - $r) / $lambda) + 2);
-        } elseif ($Cmax == $b) {
-            $hue = 60 * ((($r - $g) / $lambda) + 4);
+        $max = max($r, $g, $b);
+        $min = min($r, $g, $b);
+
+        $l = ($max + $min) / 2;
+
+        if ($max == $min) {
+            $h = $s = 0;
         } else {
-            throw new \UnexpectedValueException('this should never be thrown');
-        }
 
-        if ($hue < 0) {
-            $hue += 360;
-        }
-        if ($hue > 359) {
-            $hue -= 360;
-        }
+            $d = $max - $min;
+            $s = $l > 0.5 ? $d / (2 - $max - $min) : $d / ($max + $min);
 
-        if ($lambda == 0) {
-            $s = 0;
-        } else {
-            $s = $lambda / (1 - abs((2 * $l) - 1));
-        }
+            switch ($max) {
+                case $r: $h = ($g - $b) / $d + ($g < $b ? 6 : 0); break;
+                case $g: $h = ($b - $r) / $d + 2; break;
+                case $b: $h = ($r - $g) / $d + 4; break;
+                default:
+                    throw  new Exception('this should never happen');
+            }
 
-        $lightness = $l * 100;
-        $saturation = $s * 100;
+            $h /= 6;
+        }
 
         return new HslaColor(
-            (int) round($hue),
-            (int) round($saturation),
-            (int) round($lightness),
-            $this->alpha
+            $h * 359,
+            $s * 100,
+            $l * 100,
+            $this->alpha / 255
         );
     }
 
+
     /**
-     * @param int $delta
+     * @param float $delta
      *
      * @return ColorInterface
      */
-    public function withAdjustedAlpha(int $delta): ColorInterface
+    public function withAdjustedAlpha(float $delta): ColorInterface
     {
+        $delta = $delta / 100 * 255;
         $alpha = $this->getAlpha() + $delta;
         if ($alpha < 0) {
             $alpha = 0;

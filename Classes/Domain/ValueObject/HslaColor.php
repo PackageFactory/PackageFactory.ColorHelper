@@ -7,45 +7,45 @@ namespace PackageFactory\ColorHelper\Domain\ValueObject;
 class HslaColor extends AbstractColor implements ColorInterface
 {
     /**
-     * @var int
+     * @var float
      */
     private $hue;
 
     /**
-     * @var int
+     * @var float
      */
     private $saturation;
 
     /**
-     * @var int
+     * @var float
      */
     private $lightness;
     /**
-     * @var int
+     * @var float
      */
     private $alpha;
 
     /**
      * HslaColor constructor.
      *
-     * @param int $hue
-     * @param int $saturation
-     * @param int $lightness
-     * @param int $alpha
+     * @param float $hue
+     * @param float $saturation
+     * @param float $lightness
+     * @param float $alpha
      */
-    public function __construct(int $hue, int $saturation, int $lightness, int $alpha = 255)
+    public function __construct(float $hue, float $saturation, float $lightness, float $alpha = 1)
     {
-        if ($hue < 0 || $hue > 359) {
-            throw new \InvalidArgumentException('argument hue has to be an integer between 0 and 359, '.$hue.' was given.');
+        if ($hue < 0 || $hue > 360) {
+            throw new \InvalidArgumentException('argument hue has to be a float between 0 and 359, '.$hue.' was given.');
         }
         if ($saturation < 0 || $saturation > 100) {
-            throw new \InvalidArgumentException('argument saturation has to be an integer between 0 and 100, '.$saturation.' was given.');
+            throw new \InvalidArgumentException('argument saturation has to be a float between 0 and 100, '.$saturation.' was given.');
         }
         if ($lightness < 0 || $lightness > 100) {
-            throw new \InvalidArgumentException('argument luminosity has to be an integer between 0 and 100, '.$lightness.' was given.');
+            throw new \InvalidArgumentException('argument luminosity has to be a float between 0 and 100, '.$lightness.' was given.');
         }
-        if ($alpha < 0 || $alpha > 255) {
-            throw new \InvalidArgumentException('argument alpha has to be an integer between 0 and 255, '.$alpha.' was given');
+        if ($alpha < 0 || $alpha > 1) {
+            throw new \InvalidArgumentException('argument alpha has to be a float between 0 and 1, '.$alpha.' was given');
         }
 
         $this->hue = $hue;
@@ -55,95 +55,78 @@ class HslaColor extends AbstractColor implements ColorInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getHue(): int
+    public function getHue(): float
     {
         return $this->hue;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getSaturation(): int
+    public function getSaturation(): float
     {
         return $this->saturation;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getLightness(): int
+    public function getLightness(): float
     {
         return $this->lightness;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getAlpha(): int
+    public function getAlpha(): float
     {
         return $this->alpha;
     }
 
     /**
      * @return RgbaColor
+     * @see http://en.wikipedia.org/wiki/HSL_color_space.
+     * @see https://gist.github.com/mjackson/5311256
      */
     public function asRgba(): RgbaColor
     {
-        $S = $this->saturation / 100;
-        $L = $this->lightness / 100;
-        $H = $this->hue;
+        $h = $this->hue / 360;
+        $l = $this->lightness / 100;
+        $s = $this->saturation / 100;
+        $a = $this->alpha;
 
-        $C = (1 - abs((2 * $L) - 1)) * $S;
-        $X = $C * (1 - abs((($H / 60) % 2) - 1));
-        $m = $L - ($C / 2);
-
-        if ($S == 0) {
-            $rgb = (int) round($L * 255);
-            return new RgbaColor($rgb, $rgb, $rgb, $this->alpha);
+        if ($s == 0) {
+            $rgb = $l * 255;
+            return new RgbaColor($rgb, $rgb, $rgb, $this->alpha * 255);
         }
 
-        if ($this->hue < 0) {
-            throw new \UnexpectedValueException('this should never be thrown');
-        } elseif ($H < 60) {
-            $r = $C;
-            $g = $X;
-            $b = 0;
-        } elseif ($H < 120) {
-            $r = $X;
-            $g = $C;
-            $b = 0;
-        } elseif ($H < 180) {
-            $r = 0;
-            $g = $C;
-            $b = $X;
-        } elseif ($H < 240) {
-            $r = 0;
-            $g = $X;
-            $b = $C;
-        } elseif ($H < 300) {
-            $r = $X;
-            $g = 0;
-            $b = $C;
-        } elseif ($H < 360) {
-            $r = $C;
-            $g = 0;
-            $b = $X;
-        } else {
-            throw new \UnexpectedValueException('this should never be thrown');
-        }
+        $q = $l < 0.5 ? $l * (1 + $s) : $l + $s - $l * $s;
+        $p = 2 * $l - $q;
 
-        $R = ($r + $m) * 255;
-        $G = ($g + $m) * 255;
-        $B = ($b + $m) * 255;
+        $r = $this->hue2rgb($p, $q, $h + 1/3);
+        $g = $this->hue2rgb($p, $q, $h);
+        $b = $this->hue2rgb($p, $q, $h - 1/3);
 
-        return new RgbaColor(
-            (int) round($R),
-            (int) round($G),
-            (int) round($B),
-            $this->alpha
-        );
+        return new RgbaColor($r * 255, $g * 255, $b * 255, $a * 255);
+    }
+
+    /**
+     * @param float $p
+     * @param float $q
+     * @param float $t
+     * @return float
+     */
+    private function hue2rgb(float $p, float $q, float $t): float
+    {
+        if($t < 0) $t += 1;
+        if($t > 1) $t -= 1;
+        if($t < 1/6) return $p + ($q - $p) * 6 * $t;
+        if($t < 1/2) return $q;
+        if($t < 2/3) return $p + ($q - $p) * (2/3 - $t) * 6;
+        return $p;
     }
 
     /**
@@ -155,18 +138,39 @@ class HslaColor extends AbstractColor implements ColorInterface
     }
 
     /**
-     * @param int $delta
+     * @param ColorInterface $color
+     * @param float $maxDist
+     * @return bool
+     */
+    public function isSimilarTo(ColorInterface $color, float $maxDist = 5): bool
+    {
+        $color = $color->asHsla();
+
+        $deltaH1 = abs($this->getHue() - $color->getHue());
+        $deltH12 = 360 - $color->getHue() + $this->getHue();
+
+        return (
+            min($deltaH1, $deltH12) < $maxDist
+            && abs($this->getSaturation() - $color->getSaturation()) < $maxDist
+            && abs($this->getLightness() - $color->getLightness()) < $maxDist
+            && abs($this->getAlpha() - $color->getAlpha()) < ($maxDist / 100)
+        );
+    }
+
+    /**
+     * @param float $delta 0..100
      *
      * @return ColorInterface
      */
-    public function withAdjustedAlpha(int $delta): ColorInterface
+    public function withAdjustedAlpha(float $delta): ColorInterface
     {
+        $delta = $delta / 100;
         $alpha = $this->getAlpha() + $delta;
         if ($alpha < 0) {
             $alpha = 0;
         }
-        if ($alpha > 255) {
-            $alpha = 255;
+        if ($alpha > 1) {
+            $alpha = 1;
         }
 
         return new self(

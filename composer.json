@@ -36,16 +36,9 @@
             "composer test:prepare",
             "Build/Travis/bin/phpunit --verbose -c Build/Travis/unit-tests.xml"
         ],
-        "test:functional": [
-            "composer test:prepare",
-            "cd Build/Travis && FLOW_CONTEXT=Testing ./flow flow:cache:flush",
-            "cd Build/Travis && FLOW_CONTEXT=Testing ./flow flow:package:rescan",
-            "FLOW_CONTEXT=Testing Build/Travis/bin/phpunit --verbose -c Build/Travis/functional-tests.xml"
-        ],
         "test": [
             "composer test:phpstan",
-            "composer test:unit",
-            "composer test:functional"
+            "composer test:unit"
         ]
     }
 }
