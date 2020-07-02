@@ -1,5 +1,5 @@
 # PackageFactory.ColorHelper
-## EEL Color Helper, implementing some of the less color tranformations
+## EEL Color Helper, implementing a fluent interface for color transformations
 
 The package provides the `Color` helper that exposes the following methods to Fusion.
 
