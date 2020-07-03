@@ -1,7 +1,9 @@
 # PackageFactory.ColorHelper
-## EEL Color Helper, implementing a fluent interface for color transformations
+## EEL Color Helper, for fluent color transformations and Fusion for rendering css custom properties
 
 The package provides the `Color` helper that exposes the following methods to Fusion.
+The fusion prototype `PackageFactory.ColorHelper:CssVariables` allows to write sets of 
+calculated color values as css custom properties.
 
 ### Creating
 
@@ -60,6 +62,58 @@ only render an alpha value if the color is transparent.
 - `hex = ${ Color.rgb(255,0,0).hex() }` >> #ff0000
 - `rgb = ${ Color.rgba(255,0,0).fadeout(50).rgb() }` >> rgba( 255, 0, 0, 0.5)
 - `hsl = ${ Color.rgba(255,0,0).hsl() }` >> hsla( 0, 100%, 50%)
+
+### Rendering as Css Custom Properties
+
+The fusion prototype `PackageFactory.ColorHelper:CssVariables` allows to 
+render DataStructures as CssVariables. This can be used for customizing
+css based on node properties as shown in the example below. 
+
+#### `PackageFactory.ColorHelper:CssVariables`
+
+- `values` (`array<string>`, default: `Neos.Fusion:DataStructure`) the values to render as css variables
+- `mediaQuery` (`string`, default `null`) when given renders the css variables into a `@media ... {}` section 
+- `selector` (`string`, default `:root`) : css-selector the variables are rendered for 
+ 
+```
+prototype(Vendor.Site:CssPoroperties) < prototype(Neos.Fusion:Component) {
+
+    renderer = Neos.Fusion:Tag
+        tagName = 'script'
+        content = Neos.Fusion:Join {
+        
+            //
+            // based on the properties `font` and `bgColor` some
+            // costom properties are prepared globally
+            // 
+            
+            base = PackageFactory.ColorHelper:CssVariables {
+                values = Neos.Fusion:DataStructure {        
+                    font = ${q(site).property('font')}
+                    bg = ${q(site).property('bgColor')}
+                    bg-lighter = ${Color.css(this.bg).lighten(20)}
+                    bg-transparent = ${Color.css(this.bg).lighten(20)}  
+                }
+            }
+            
+            //
+            // based on the properties `bgColorMobile` additional css
+            // properties are defined that will be rendered in mobile 
+            // breakpoints and override the other values 
+            //     
+
+            mobile = PackageFactory.ColorHelper:CssVariables {
+                mediaQuery = 'screem and (max-width: 600px)'
+                values = Neos.Fusion:DataStructure {
+                    bg = ${q(site).property('bgColorMobile')}
+                    bg-lighter = ${Color.css(this.bg).lighten(20)}
+                    bg-transparent = ${Color.css(this.bg).lighten(20)}  
+                }
+            }
+        }
+    `
+}
+```
 
 ## Installation
 

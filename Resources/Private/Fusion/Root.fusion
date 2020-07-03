@@ -1,0 +1,17 @@
+prototype(PackageFactory.ColorHelper:CssVariables) < prototype(Neos.Fusion:Component) {
+
+    mediaQuery = null
+    selector = ':root'
+    values = Neos.Fusion:DataStructure
+
+    renderer = Neos.Fusion:Loop {
+        items = ${props.values}
+        itemName = "value"
+        itemKey = "key"
+        itemRenderer = ${'--' + key + ':' + value + ';'}
+
+        @process.wrapInSelector = ${props.selector + ' { ' + value + ' } '}
+        @process.wrapInMediaQuery = ${'@media ' + props.mediaQuery + ' { ' + value + ' } '}
+        @process.wrapInMediaQuery.@if.hasMediaQuery = ${props.mediaQuery}
+    }
+}
