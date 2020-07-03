@@ -76,7 +76,7 @@ css based on node properties as shown in the example below.
 - `selector` (`string`, default `:root`) : css-selector the variables are rendered for 
  
 ```
-prototype(Vendor.Site:CssPoroperties) < prototype(Neos.Fusion:Component) {
+prototype(Vendor.Site:CustomCssProperties) < prototype(Neos.Fusion:Component) {
 
     renderer = Neos.Fusion:Tag
         tagName = 'script'
@@ -92,7 +92,7 @@ prototype(Vendor.Site:CssPoroperties) < prototype(Neos.Fusion:Component) {
                     font = ${q(site).property('font')}
                     bg = ${q(site).property('bgColor')}
                     bg-lighter = ${Color.css(this.bg).lighten(20)}
-                    bg-transparent = ${Color.css(this.bg).lighten(20)}  
+                    bg-transparent = ${Color.css(this.bg).fadeout(20)}  
                 }
             }
             
@@ -103,11 +103,11 @@ prototype(Vendor.Site:CssPoroperties) < prototype(Neos.Fusion:Component) {
             //     
 
             mobile = PackageFactory.ColorHelper:CssVariables {
-                mediaQuery = 'screem and (max-width: 600px)'
+                mediaQuery = 'screen and (max-width: 600px)'
                 values = Neos.Fusion:DataStructure {
                     bg = ${q(site).property('bgColorMobile')}
                     bg-lighter = ${Color.css(this.bg).lighten(20)}
-                    bg-transparent = ${Color.css(this.bg).lighten(20)}  
+                    bg-transparent = ${Color.css(this.bg).fadeout(20)}  
                 }
             }
         }
