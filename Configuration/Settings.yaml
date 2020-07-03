@@ -2,3 +2,7 @@ Neos:
   Fusion:
     defaultContext:
       Color: 'PackageFactory\ColorHelper\Eel\ColorBuilder'
+  Neos:
+    fusion:
+      autoInclude:
+        PackageFactory.ColorHelper: true
