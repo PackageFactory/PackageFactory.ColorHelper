@@ -8,7 +8,7 @@ provides an interface for fluent color transformations.
 prototype(Vendor.Site:CustomCssProperties) < prototype(Neos.Fusion:Component) {
 
     renderer = Neos.Fusion:Tag
-        tagName = 'script'
+        tagName = 'style'
         content = Neos.Fusion:Join {
         
             //
