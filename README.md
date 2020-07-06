@@ -7,39 +7,34 @@ provides an interface for fluent color transformations.
 ```
 prototype(Vendor.Site:CustomCssProperties) < prototype(Neos.Fusion:Component) {
 
-    renderer = Neos.Fusion:Tag
-        tagName = 'style'
-        content = Neos.Fusion:Join {
-        
-            //
-            // based on the properties `font` and `bgColor` some
-            // costom properties are prepared globally
-            // 
-            
-            base = PackageFactory.ColorHelper:CssVariables {
-                values = Neos.Fusion:DataStructure {        
-                    font = ${q(site).property('font')}
-                    bg = ${q(site).property('bgColor')}
-                    bg-lighter = ${Color.css(this.bg).lighten(20)}
-                    bg-transparent = ${Color.css(this.bg).fadeout(20)}  
-                }
-            }
-            
-            //
-            // based on the properties `bgColorMobile` additional css
-            // properties are defined that will be rendered in mobile 
-            // breakpoints and override the other values 
-            //     
+    //
+    // based on the size-properties `font` and `bgColor` some
+    // values shall be set globally
+    // 
+    base = Neos.Fusion:DataStructure {        
+        font = ${q(site).property('font')}
+        bg = ${q(site).property('bgColor')}
+        bg-lighter = ${Color.css(this.bg).lighten(20)}
+        bg-transparent = ${Color.css(this.bg).fadeout(20)}  
+    }
 
-            mobile = PackageFactory.ColorHelper:CssVariables {
-                mediaQuery = 'screen and (max-width: 600px)'
-                values = Neos.Fusion:DataStructure {
-                    bg = ${q(site).property('bgColorMobile')}
-                    bg-lighter = ${Color.css(this.bg).lighten(20)}
-                    bg-transparent = ${Color.css(this.bg).fadeout(20)}  
-                }
-            }
-        }
+    //
+    // based on the properties `bgColorMobile` additional css
+    // properties are defined that will be rendered in mobile 
+    // breakpoints and override the other values 
+    //  
+    mobileQuery = 'screen and (max-width: 600px)'
+    mobile = Neos.Fusion:DataStructure {
+        bg = ${q(site).property('bgColorMobile')}
+        bg-lighter = ${Color.css(this.bg).lighten(20)}
+        bg-transparent = ${Color.css(this.bg).fadeout(20)}  
+    }
+
+    renderer = afx`
+        <style>
+            <PackageFactory.ColorHelper:CssVariables value={props.base} />
+            <PackageFactory.ColorHelper:CssVariables value={props.mobile} mediaQuery={props.mobileQuery} />
+        </style>
     `
 }
 ```
