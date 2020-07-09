@@ -90,14 +90,6 @@ class RgbaColor extends AbstractColor implements ColorInterface
     }
 
     /**
-     * @return RgbaColor
-     */
-    public function asRgba(): RgbaColor
-    {
-        return $this;
-    }
-
-    /**
      * @return HslaColor
      *
      * @see http://en.wikipedia.org/wiki/HSL_color_space.

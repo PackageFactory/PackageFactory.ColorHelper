@@ -7,6 +7,30 @@ namespace PackageFactory\ColorHelper\Domain\ValueObject;
 abstract class AbstractColor implements ColorInterface
 {
     /**
+     * @return HslaColor
+     */
+    public function asHsla(): HslaColor
+    {
+        if ($this instanceof HslaColor) {
+            return $this;
+        } else {
+            throw new \Exception('Conversion to hsla is not implemented');
+        }
+    }
+
+    /**
+     * @return RgbaColor
+     */
+    public function asRgba(): RgbaColor
+    {
+        if ($this instanceof RgbaColor) {
+            return $this;
+        } else {
+            throw new \Exception('Conversion to rgba is not implemented');
+        }
+    }
+
+    /**
      * @return string
      */
     public function __toString(): string
