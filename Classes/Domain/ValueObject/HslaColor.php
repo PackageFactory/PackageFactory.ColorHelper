@@ -146,7 +146,7 @@ class HslaColor extends AbstractColor implements ColorInterface
     /**
      * @return HslaColor
      */
-    public function asHsla(): self
+    public function asHsla(): HslaColor
     {
         return $this;
     }

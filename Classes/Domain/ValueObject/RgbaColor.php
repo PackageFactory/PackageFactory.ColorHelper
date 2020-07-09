@@ -92,7 +92,7 @@ class RgbaColor extends AbstractColor implements ColorInterface
     /**
      * @return RgbaColor
      */
-    public function asRgba(): self
+    public function asRgba(): RgbaColor
     {
         return $this;
     }
