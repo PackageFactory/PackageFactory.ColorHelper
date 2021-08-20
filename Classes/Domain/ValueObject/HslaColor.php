@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
+use Neos\Flow\Annotations as Flow;
+
+/**
+ * @Flow\Proxy(false)
+ */
 class HslaColor extends AbstractColor implements ColorInterface
 {
     /**

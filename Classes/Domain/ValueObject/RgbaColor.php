@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace PackageFactory\ColorHelper\Domain\ValueObject;
 
-use mysql_xdevapi\Exception;
+use Neos\Flow\Annotations as Flow;
 
+/**
+ * @Flow\Proxy(false)
+ */
 class RgbaColor extends AbstractColor implements ColorInterface
 {
     /**
@@ -117,7 +120,7 @@ class RgbaColor extends AbstractColor implements ColorInterface
                 case $g: $h = ($b - $r) / $d + 2; break;
                 case $b: $h = ($r - $g) / $d + 4; break;
                 default:
-                    throw  new Exception('this should never happen');
+                    throw  new \Exception('this should never happen');
             }
 
             $h /= 6;
