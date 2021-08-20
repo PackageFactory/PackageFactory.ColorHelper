@@ -38,7 +38,7 @@ class HslaColor extends AbstractColor implements ColorInterface
      * @param float $lightness
      * @param float $alpha
      */
-    public function __construct(float $hue, float $saturation, float $lightness, float $alpha = 1)
+    public function __construct(float $hue, float $saturation, float $lightness, float $alpha = 100)
     {
         if ($hue < 0 || $hue > 360) {
             throw new \InvalidArgumentException('argument hue has to be a float between 0 and 359, '.$hue.' was given.');
@@ -49,8 +49,8 @@ class HslaColor extends AbstractColor implements ColorInterface
         if ($lightness < 0 || $lightness > 100) {
             throw new \InvalidArgumentException('argument luminosity has to be a float between 0 and 100, '.$lightness.' was given.');
         }
-        if ($alpha < 0 || $alpha > 1) {
-            throw new \InvalidArgumentException('argument alpha has to be a float between 0 and 1, '.$alpha.' was given');
+        if ($alpha < 0 || $alpha > 100) {
+            throw new \InvalidArgumentException('argument alpha has to be a float between 0 and 100, '.$alpha.' was given');
         }
 
         $this->hue = $hue;
@@ -102,12 +102,11 @@ class HslaColor extends AbstractColor implements ColorInterface
         $h = $this->hue / 360;
         $l = $this->lightness / 100;
         $s = $this->saturation / 100;
-        $a = $this->alpha;
 
         if ($s == 0) {
             $rgb = $l * 255;
 
-            return new RgbaColor($rgb, $rgb, $rgb, $this->alpha * 255);
+            return new RgbaColor($rgb, $rgb, $rgb, $this->alpha);
         }
 
         $q = $l < 0.5 ? $l * (1 + $s) : $l + $s - $l * $s;
@@ -117,7 +116,7 @@ class HslaColor extends AbstractColor implements ColorInterface
         $g = $this->hue2rgb($p, $q, $h);
         $b = $this->hue2rgb($p, $q, $h - 1 / 3);
 
-        return new RgbaColor($r * 255, $g * 255, $b * 255, $a * 255);
+        return new RgbaColor($r * 255, $g * 255, $b * 255, $this->alpha);
     }
 
     /**
@@ -155,13 +154,12 @@ class HslaColor extends AbstractColor implements ColorInterface
      */
     public function withAdjustedAlpha(float $delta): ColorInterface
     {
-        $delta = $delta / 100;
         $alpha = $this->getAlpha() + $delta;
         if ($alpha < 0) {
             $alpha = 0;
         }
-        if ($alpha > 1) {
-            $alpha = 1;
+        if ($alpha > 100) {
+            $alpha = 100;
         }
 
         return new self(

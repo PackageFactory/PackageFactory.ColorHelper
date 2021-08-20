@@ -39,7 +39,7 @@ class RgbaColor extends AbstractColor implements ColorInterface
      * @param float $blue
      * @param float $alpha
      */
-    public function __construct(float $red, float $green, float $blue, float $alpha = 255)
+    public function __construct(float $red, float $green, float $blue, float $alpha = 100)
     {
         if ($red < 0 || $red > 255) {
             throw new \InvalidArgumentException('argument red has to be an integer between 0 and 255');
@@ -50,8 +50,8 @@ class RgbaColor extends AbstractColor implements ColorInterface
         if ($blue < 0 || $blue > 255) {
             throw new \InvalidArgumentException('argument blue has to be an integer between 0 and 255');
         }
-        if ($alpha < 0 || $alpha > 255) {
-            throw new \InvalidArgumentException('argument alpha has to be an integer between 0 and 255');
+        if ($alpha < 0 || $alpha > 100) {
+            throw new \InvalidArgumentException('argument alpha has to be an integer between 0 and 100');
         }
 
         $this->red = $red;
@@ -130,7 +130,7 @@ class RgbaColor extends AbstractColor implements ColorInterface
             $h * 359,
             $s * 100,
             $l * 100,
-            $this->alpha / 255
+            $this->alpha
         );
     }
 
@@ -141,13 +141,12 @@ class RgbaColor extends AbstractColor implements ColorInterface
      */
     public function withAdjustedAlpha(float $delta): ColorInterface
     {
-        $delta = $delta / 100 * 255;
         $alpha = $this->getAlpha() + $delta;
         if ($alpha < 0) {
             $alpha = 0;
         }
-        if ($alpha > 255) {
-            $alpha = 255;
+        if ($alpha > 100) {
+            $alpha = 100;
         }
 
         return new self(

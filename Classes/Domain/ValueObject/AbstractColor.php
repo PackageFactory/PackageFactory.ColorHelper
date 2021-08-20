@@ -44,7 +44,7 @@ abstract class AbstractColor implements ColorInterface
     public function getHexString(): string
     {
         $rgba = $this->asRgba();
-        if ($rgba->getAlpha() == 255) {
+        if ($rgba->getAlpha() == 100) {
             return '#'
                 .str_pad(dechex((int) round($rgba->getRed())), 2, '0')
                 .str_pad(dechex((int) round($rgba->getGreen())), 2, '0')
@@ -54,7 +54,7 @@ abstract class AbstractColor implements ColorInterface
                 .str_pad(dechex((int) round($rgba->getRed())), 2, '0')
                 .str_pad(dechex((int) round($rgba->getGreen())), 2, '0')
                 .str_pad(dechex((int) round($rgba->getBlue())), 2, '0')
-                .str_pad(dechex((int) round($rgba->getAlpha())), 2, '0');
+                .str_pad(dechex((int) round($rgba->getAlpha() * 2.55)), 2, '0');
         }
     }
 
@@ -64,10 +64,10 @@ abstract class AbstractColor implements ColorInterface
     public function getHslaString(): string
     {
         $hslaColor = $this->asHsla();
-        if ($hslaColor->getAlpha() == 1) {
+        if ($hslaColor->getAlpha() == 100) {
             return sprintf('hsl(%s, %s%%, %s%%)', round($hslaColor->getHue()), round($hslaColor->getSaturation()), round($hslaColor->getLightness()));
         } else {
-            return sprintf('hsla(%s, %s%%, %s%%, %s)', round($hslaColor->getHue()), round($hslaColor->getSaturation()), round($hslaColor->getLightness()), round($hslaColor->getAlpha(), 2));
+            return sprintf('hsla(%s, %s%%, %s%%, %s)', round($hslaColor->getHue()), round($hslaColor->getSaturation()), round($hslaColor->getLightness()), round($hslaColor->getAlpha()).'%');
         }
     }
 
@@ -77,10 +77,10 @@ abstract class AbstractColor implements ColorInterface
     public function getRgbaString(): string
     {
         $rgbColor = $this->asRgba();
-        if ($rgbColor->getAlpha() == 255) {
+        if ($rgbColor->getAlpha() == 100) {
             return sprintf('rgb(%s, %s, %s)', round($rgbColor->getRed()), round($rgbColor->getGreen()), round($rgbColor->getBlue()));
         } else {
-            return sprintf('rgba(%s, %s, %s, %s)', round($rgbColor->getRed()), round($rgbColor->getGreen()), round($rgbColor->getBlue()), $rgbColor->getAlpha());
+            return sprintf('rgba(%s, %s, %s, %s)', round($rgbColor->getRed()), round($rgbColor->getGreen()), round($rgbColor->getBlue()), round($rgbColor->getAlpha()).'%');
         }
     }
 

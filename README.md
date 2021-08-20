@@ -57,8 +57,10 @@ css based on node properties as shown in the example below.
 
 Colors can be created from hex, rgb and hsl values
 - `color = ${ Color.hex('#80e619') }`  expects a hex string of 3 or 6 chars
-- `color = ${ Color.rgb(100, 0, 255) }` expects three integers each between 0 and 255
-- `color = ${ Color.hsl(156, 25, 75) }` expects three integers a degree 0-355 and two percent values 0-100 
+- `color = ${ Color.rgb(100, 0, 255) }` expects three numbers each between 0 and 255
+- `color = ${ Color.hsl(156, 25, 75) }` expects three numbers a degree 0-355 and two percent values 0-100
+- `color = ${ Color.rgba(100, 0, 255, 50) }` expects three numbers each between 0 and 255 plus a numbers between 0-100
+- `color = ${ Color.hsla(156, 25, 75, 50) }` expects three numbers a degree 0-355 and three percent values 0-100
 
 The methods rgb and hsl allow to specify the alpha as fourth argument 
 expecting a float between 0 and 1 `color = ${ Color.hsl(156, 25, 75, 0.5) }`

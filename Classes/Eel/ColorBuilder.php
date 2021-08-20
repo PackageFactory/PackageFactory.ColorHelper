@@ -20,11 +20,23 @@ class ColorBuilder implements ProtectedContextAwareInterface
      * @param float $red   0-255
      * @param float $green 0-255
      * @param float $blue  0-255
-     * @param float $alpha 0-255
      *
      * @return ColorHelper
      */
-    public function rgb(float $red, float $green, float $blue, float $alpha = 255): ColorHelper
+    public function rgb(float $red, float $green, float $blue): ColorHelper
+    {
+        return $this->rgba($red, $green, $blue, 100);
+    }
+
+    /**
+     * @param float $red   0-255
+     * @param float $green 0-255
+     * @param float $blue  0-255
+     * @param float $alpha 0-100
+     *
+     * @return ColorHelper
+     */
+    public function rgba(float $red, float $green, float $blue, float $alpha = 100): ColorHelper
     {
         return new ColorHelper(
             new RgbaColor($red, $green, $blue, $alpha)
@@ -32,14 +44,26 @@ class ColorBuilder implements ProtectedContextAwareInterface
     }
 
     /**
-     * @param float $hue        0-360
-     * @param float $saturatiom 0-100
-     * @param float $lightness  0-100
-     * @param float $alpha      0-1
+     * @param float $hue
+     * @param float $saturatiom
+     * @param float $lightness
      *
      * @return ColorHelper
      */
-    public function hsl(float $hue, float $saturatiom, float $lightness, float $alpha = 1): ColorHelper
+    public function hsl(float $hue, float $saturatiom, float $lightness): ColorHelper
+    {
+        return $this->hsla($hue, $saturatiom, $lightness, 100);
+    }
+
+    /**
+     * @param float $hue        0-360
+     * @param float $saturatiom 0-100
+     * @param float $lightness  0-100
+     * @param float $alpha      0-100
+     *
+     * @return ColorHelper
+     */
+    public function hsla(float $hue, float $saturatiom, float $lightness, float $alpha = 100): ColorHelper
     {
         return new ColorHelper(
             new HslaColor($hue, $saturatiom, $lightness, $alpha)
@@ -58,7 +82,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = hexdec($matches['red'].$matches['red']);
             $green = hexdec($matches['green'].$matches['green']);
             $blue = hexdec($matches['blue'].$matches['blue']);
-            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha'].$matches['alpha']) : 255;
+            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha'].$matches['alpha']) / 2.55 : 100;
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -67,7 +91,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = hexdec($matches['red']);
             $green = hexdec($matches['green']);
             $blue = hexdec($matches['blue']);
-            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha']) : 255;
+            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha']) / 2.55 : 100;
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -91,7 +115,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = hexdec($matches['red'].$matches['red']);
             $green = hexdec($matches['green'].$matches['green']);
             $blue = hexdec($matches['blue'].$matches['blue']);
-            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha'].$matches['alpha']) : 255;
+            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha'].$matches['alpha']) / 2.55 : 100;
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -100,7 +124,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = hexdec($matches['red']);
             $green = hexdec($matches['green']);
             $blue = hexdec($matches['blue']);
-            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha']) : 255;
+            $alpha = isset($matches['alpha']) ? hexdec($matches['alpha']) / 2.55 : 100;
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -109,7 +133,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $red = $this->parseNumber($matches['red'], 255);
             $green = $this->parseNumber($matches['red'], 255);
             $blue = $this->parseNumber($matches['red'], 255);
-            $alpha = isset($matches['alpha']) ? $this->parseNumber($matches['alpha'], 255) : 255;
+            $alpha = isset($matches['alpha']) ? $this->parseNumber($matches['alpha'], 1) * 100 : 100;
 
             return new ColorHelper(
                 new RgbaColor($red, $green, $blue, $alpha)
@@ -118,7 +142,7 @@ class ColorBuilder implements ProtectedContextAwareInterface
             $hue = $this->parseNumber($matches['hue'], 360);
             $saturation = $this->parseNumber($matches['saturation'], 100);
             $lightness = $this->parseNumber($matches['lightness'], 100);
-            $alpha = isset($matches['alpha']) ? $this->parseNumber($matches['alpha'], 1) : 1;
+            $alpha = isset($matches['alpha']) ? $this->parseNumber($matches['alpha'], 1) * 100 : 100;
 
             return new ColorHelper(
                 new HslaColor($hue, $saturation, $lightness, $alpha)
@@ -142,6 +166,10 @@ class ColorBuilder implements ProtectedContextAwareInterface
             );
 
             return $max * ($number / 100);
+        } elseif (substr($value, 0, 2) == '0.') {
+            $number = (float) $value;
+
+            return $max * $number;
         } else {
             $value = (float) $value;
             if ($circle) {
