@@ -49,7 +49,23 @@ class ColorHelper implements ProtectedContextAwareInterface
     /**
      * @return string
      */
+    public function rgba(): string
+    {
+        return $this->color->getRgbaString();
+    }
+
+    /**
+     * @return string
+     */
     public function hsl(): string
+    {
+        return $this->color->getHslaString();
+    }
+
+    /**
+     * @return string
+     */
+    public function hsla(): string
     {
         return $this->color->getHslaString();
     }

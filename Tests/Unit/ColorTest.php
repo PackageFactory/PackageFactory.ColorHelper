@@ -77,8 +77,8 @@ class ColorTest extends AbstractColorTest
             [new RgbaColor(0, 255, 0), '#00ff00'],
             [new RgbaColor(0, 0, 255), '#0000ff'],
             [new RgbaColor(255, 255, 255, 0), '#ffffff00'],
-            [new RgbaColor(255, 255, 255, 128), '#ffffff80'],
-            [new RgbaColor(255, 255, 255, 255), '#ffffff'],
+            [new RgbaColor(255, 255, 255, 50), '#ffffff80'],
+            [new RgbaColor(255, 255, 255, 100), '#ffffff'],
         ];
     }
 
@@ -97,9 +97,9 @@ class ColorTest extends AbstractColorTest
             [new RgbaColor(255, 0, 0), 'rgb(255, 0, 0)'],
             [new RgbaColor(0, 255, 0), 'rgb(0, 255, 0)'],
             [new RgbaColor(0, 0, 255), 'rgb(0, 0, 255)'],
-            [new RgbaColor(255, 255, 255, 0), 'rgba(255, 255, 255, 0)'],
-            [new RgbaColor(255, 255, 255, 128), 'rgba(255, 255, 255, 128)'],
-            [new RgbaColor(255, 255, 255, 255), 'rgb(255, 255, 255)'],
+            [new RgbaColor(255, 255, 255, 0), 'rgba(255, 255, 255, 0%)'],
+            [new RgbaColor(255, 255, 255, 50), 'rgba(255, 255, 255, 50%)'],
+            [new RgbaColor(255, 255, 255, 100), 'rgb(255, 255, 255)'],
         ];
     }
 
@@ -117,9 +117,9 @@ class ColorTest extends AbstractColorTest
         return [
             [new HslaColor(320, 20, 50), 'hsl(320, 20%, 50%)'],
             [new HslaColor(50, 80, 80), 'hsl(50, 80%, 80%)'],
-            [new HslaColor(320, 20, 50, 0), 'hsla(320, 20%, 50%, 0)'],
-            [new HslaColor(320, 20, 50, 0.5), 'hsla(320, 20%, 50%, 0.5)'],
-            [new HslaColor(320, 20, 50, 1), 'hsl(320, 20%, 50%)'],
+            [new HslaColor(320, 20, 50, 0), 'hsla(320, 20%, 50%, 0%)'],
+            [new HslaColor(320, 20, 50, 50), 'hsla(320, 20%, 50%, 50%)'],
+
         ];
     }
 
@@ -135,15 +135,15 @@ class ColorTest extends AbstractColorTest
     public function colorMixingWorksDataProvider(): array
     {
         return [
-            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 100, new RgbaColor(0, 0, 0, 0)],
-            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 75, new RgbaColor(64, 64, 64, 64)],
-            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 50, new RgbaColor(128, 128, 128, 128)],
-            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 25, new RgbaColor(191, 191, 191, 191)],
-            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 255), 0, new RgbaColor(255, 255, 255, 255)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 100), 100, new RgbaColor(0, 0, 0, 0)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 100), 75, new RgbaColor(64, 64, 64, 25)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 100), 50, new RgbaColor(128, 128, 128, 50)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 100), 25, new RgbaColor(191, 191, 191, 75)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 255, 255, 100), 0, new RgbaColor(255, 255, 255, 100)],
             [new RgbaColor(0, 0, 0, 0), new RgbaColor(255, 0, 0, 0), 50, new RgbaColor(128, 0, 0, 0)],
             [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 255, 0, 0), 50, new RgbaColor(0, 128, 0, 0)],
             [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 0, 255, 0), 50, new RgbaColor(0, 0, 128, 0)],
-            [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 0, 0, 255), 50, new RgbaColor(0, 0, 0, 128)],
+            [new RgbaColor(0, 0, 0, 0), new RgbaColor(0, 0, 0, 100), 50, new RgbaColor(0, 0, 0, 50)],
         ];
     }
 
@@ -220,15 +220,15 @@ class ColorTest extends AbstractColorTest
     public function alphaAdjustmentWorksColorsDataProvider(): array
     {
         return [
-            [new HslaColor(0, 0, 0, 0.5), 10, new HslaColor(0, 0, 0, 0.6)],
-            [new HslaColor(0, 0, 0, 0.5), -10, new HslaColor(0, 0, 0, 0.4)],
-            [new HslaColor(0, 0, 0, 0.5), 250, new HslaColor(0, 0, 0, 1)],
-            [new HslaColor(0, 0, 0, 0.5), -100, new HslaColor(0, 0, 0, 0)],
+            [new HslaColor(0, 0, 0, 50), 10, new HslaColor(0, 0, 0, 60)],
+            [new HslaColor(0, 0, 0, 50), -10, new HslaColor(0, 0, 0, 40)],
+            [new HslaColor(0, 0, 0, 50), 250, new HslaColor(0, 0, 0, 100)],
+            [new HslaColor(0, 0, 0, 50), -100, new HslaColor(0, 0, 0, 0)],
 
-            [new RgbaColor(0, 0, 0, 128), 25, new RgbaColor(0, 0, 0, 192)],
-            [new RgbaColor(0, 0, 0, 128), -25, new RgbaColor(0, 0, 0, 64)],
-            [new RgbaColor(0, 0, 0, 128), 250, new RgbaColor(0, 0, 0, 255)],
-            [new RgbaColor(0, 0, 0, 128), -250, new RgbaColor(0, 0, 0, 0)],
+            [new RgbaColor(0, 0, 0, 50), 25, new RgbaColor(0, 0, 0, 75)],
+            [new RgbaColor(0, 0, 0, 50), -25, new RgbaColor(0, 0, 0, 25)],
+            [new RgbaColor(0, 0, 0, 50), 250, new RgbaColor(0, 0, 0, 100)],
+            [new RgbaColor(0, 0, 0, 50), -250, new RgbaColor(0, 0, 0, 0)],
         ];
     }
 
